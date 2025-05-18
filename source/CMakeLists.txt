@@ -5,6 +5,7 @@ add_library(stochastic-simulation
         state.cpp
         observer.cpp
         random.cpp
+        agent.cpp
 )
 
 #include_directories will tell to the compiler where to look for the header files, in this case, the header files for the boost library.
