@@ -1,0 +1,3 @@
+C:/Software/c++/sp-exam-project/cmake-build-debug/CMakeFiles/sp_exam_project.dir
+C:/Software/c++/sp-exam-project/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Software/c++/sp-exam-project/cmake-build-debug/CMakeFiles/rebuild_cache.dir

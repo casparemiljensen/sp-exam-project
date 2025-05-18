@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "CMakeFiles\\sp_exam_project.dir\\main.cpp.obj",
+            "outputs": [
+                "C:\\Software\\c++\\sp-exam-project\\cmake-build-debug-visual-studio\\vc140.pdb",
+                "CMakeFiles\\sp_exam_project.dir\\main.cpp.obj.ddi"
+            ],
+            "requires": []
+        }
+    ]
+}

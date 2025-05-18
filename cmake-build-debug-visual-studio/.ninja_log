@@ -1,0 +1,7 @@
+# ninja log v6
+4	157	7692686571209212	CMakeFiles/sp_exam_project.dir/main.cpp.obj.ddi	67ac6ea360b7b775
+158	251	7692686573608849	CMakeFiles/sp_exam_project.dir/CXX.dd	8f9b08e80accd85b
+158	251	7692686573608849	C:/Software/c++/sp-exam-project/cmake-build-debug-visual-studio/CMakeFiles/sp_exam_project.dir/CXXModules.json	8f9b08e80accd85b
+158	251	7692686573608849	CMakeFiles/sp_exam_project.dir/main.cpp.obj.modmap	8f9b08e80accd85b
+258	1091	7692686573748088	CMakeFiles/sp_exam_project.dir/main.cpp.obj	6a1995ac947db878
+1091	1638	7692686582078025	sp_exam_project.exe	ce7edfc707a67fa1
