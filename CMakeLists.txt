@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD 23)
 add_subdirectory(include)
 add_subdirectory(source)
 
-add_executable(sp_exam_project source/main.cpp)
+add_executable(sp_exam_project source/main.cpp
+        include/vessels.hpp)
 
 target_link_libraries(sp_exam_project PRIVATE stochastic-simulation)

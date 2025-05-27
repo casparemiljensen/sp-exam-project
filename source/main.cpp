@@ -1,5 +1,8 @@
 #include <iostream>
-#include "reaction.cpp" // Should be HPP!!!
+#include <sstream>
+#include <fstream>
+#include "symbol_table.cpp"
+#include "vessels.hpp"
 
 int main() {
 
@@ -23,22 +26,35 @@ int main() {
     std::cout << "Reaction 2: ";
     r2.print();  // Expected: A + B + C --(0.05)--> D
 
-    // // Test 3: Single species reacts to another
-    // Reaction r3 = A >> 0.02 >>= B;
-    // std::cout << "Reaction 3: ";
-    // r3.print();  // Expected: A --(0.02)--> B
+    // Test 3: Single species reacts to another
+    Reaction r3 = A >> 0.02 >>= B;
+    std::cout << "Reaction 3: ";
+    r3.print();  // Expected: A --(0.02)--> B
+
+    // Test 3.5: Single species reacts to another
+    Reaction r4 = A + B >> 0.02 >>= B + C;
+    std::cout << "Reaction 3.5: ";
+    r4.print();  // Expected: A --(0.02)--> B
 
     // Test 4: Use temporary Species directly
-    //Reaction r4 = (Species("X") + Species("Y")) >> 0.1 >>= Species("Z");
-    //std::cout << "Reaction 4: ";
-    //r4.print();  // Expected: X + Y --(0.1)--> Z
-    std::vector<Reaction> vec = {r1, r2};
+    // Reaction r4 = (Species("X") + Species("Y")) >> 0.1 >>= Species("Z");
+    // std::cout << "Reaction 4: ";
+    // r4.print();  // Expected: X + Y --(0.1)--> Z
+
+
+    std::vector<Reaction> vec = {r1, r2, r3, r4};
     std::vector<Species> vect = {A, B, C, D};
 
 
-    std::string path = "C:\\Software\\c++\\sp-exam-project\\";
+    Vessel testVessel = circadian_rhythm();
+
+
+    std::string path = "/home/wired/dev/SP/sp-exam-project/";
     std::ofstream out(path + "network.dot");
-    out << to_dot_network(vec, vect);
+    auto a = testVessel.get_species();
+    auto b = testVessel.get_reactions();
+    out << to_dot_network(b, a) << std::endl;
+    //out << to_dot_network(vec, vect) << std::endl;
     out.close();
 
     return 0;

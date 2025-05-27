@@ -1,107 +1,142 @@
 #include <string>
 #include <vector>
 #include "reaction.hpp"
+
+#include <cmath>
 #include <sstream>
 #include <iostream>
-#include <set>
-
-void myPrint(std::string s) {
-    std::cout << s << std::endl;
-}
-
-struct Species {
-    std::string name;
-    int quantity; // How many units of this species exist
-
-    // Constructor to initialize a Species with its name
-    Species(std::string name, int quantity = 0) : name(std::move(name)), quantity(quantity) {}
-};
 
 
-struct Reaction { // Represents a reaction. E.g. A + C --(λ)--> B + C
-    std::vector<Species*> reactants; // A, C (Input species)
-    std::vector<Species*> products; // B, C (output species)
-    double rate; //The rate λ describes the intrinsic probability of individuals meeting and reacting over one time unit.
-
-    Reaction(std::vector<Species*> reactants = {}, std::vector<Species*> products = {}, double rate = 0.0)
-           : reactants(std::move(reactants)), products(std::move(products)), rate(rate) {}
-
-    void print() {
-        myPrint(this->to_string());
+    void myPrint(const std::string& s) {
+        std::cout << s << std::endl;
     }
-    // -> is dereference
 
-    std::string to_string()
-    {
-        std::string out = "";
-        for (size_t i = 0; i < reactants.size(); i++) {
-            out += reactants[i]->name;
-            if (i < reactants.size() - 1) out += " + ";
+    struct Species {
+        std::string name;
+        mutable int quantity; // How many units of this species exist
+
+        // Constructor to initialize a Species with its name
+        explicit Species(std::string name, int quantity = 0) : name(std::move(name)), quantity(quantity) {}
+
+        Species() : quantity(0) {}
+    };
+
+
+    struct Reaction { // Represents a reaction. E.g. A + C --(λ)--> B + C
+        std::vector<const Species*> reactants; // B, C (output species)
+        std::vector<const Species*> products; // B, C (output species)
+        const double rate; //The rate λ describes the intrinsic probability of individuals meeting and reacting over one time unit.
+        double delay;
+
+        explicit Reaction(std::vector<const Species*> reactants = {}, std::vector<const Species*> products = {}, const double rate = 0.0)
+               : reactants(std::move(reactants)), products(std::move(products)), rate(rate) {}
+
+        void print() const {
+            myPrint(this->to_string());
         }
-        out += " --(" + std::to_string(rate) + ")--> ";
-        for (size_t i = 0; i < products.size(); i++) {
-            out += products[i]->name;
-            if (i < products.size() - 1) out += " + ";
+
+        // -> is dereference
+
+        [[nodiscard]] std::string to_string() const {
+            std::string out;
+            for (size_t i = 0; i < reactants.size(); i++) {
+                out += reactants[i]->name;
+                if (i < reactants.size() - 1) out += " + ";
+            }
+            out += " --(" + std::to_string(rate) + ")--> ";
+            for (size_t i = 0; i < products.size(); i++) {
+                out += products[i]->name;
+                if (i < products.size() - 1) out += " + ";
+            }
+            return out;
         }
-        return out;
+
+        // We have a list of reactants.. If they meet (rate), then produce a result (products).
+
+        //Uses Vessel quantities as state, can be modified to use external state
+        void calculateDelay() {
+            int sum = 1;
+            for (const Species* sp : reactants) {
+                sum *= sp->quantity;
+            }
+
+            delay = std::exp(rate * sum);
+        }
+    };
+
+
+    std::ostream& operator<<(std::ostream& os, const Species& s) {
+        os << "Species(name=" << s.name << ")";
+        return os;
     }
-    // We have a list of reactants.. If they meet (rate), then produce a result (products).
-};
 
-
-std::ostream& operator<<(std::ostream& os, const Species& s) {
-    os << "Species(name=" << s.name << ")";
-    return os;
-}
-
-Reaction operator+(Species& a, Species& b) {
-    return Reaction({ &a, &b});
-}
-
-// (A + B) + C → adds another Species to the list of reactants
-Reaction operator+(Reaction reaction, Species& s) { // Er reaction pointer eller ikke?
-    reaction.reactants.push_back(&s);
-    return reaction;
-}
-
-// (A + B) >> 0.01 → sets the reaction rate
-Reaction operator>>(Reaction reaction, double rate) {
-    reaction.rate = rate;
-    return reaction;
-}
-
-//((A + B)) >> 0.01 >>= C → completes the reaction and creates a Reaction object
-Reaction operator>>=(Reaction reaction, Species& product) {
-    return Reaction{ reaction.reactants, { &product }, reaction.rate };
-}
-
-
-std::string to_dot(const Reaction& reaction, int index) {
-    std::ostringstream out;
-    std::string rname = "r" + std::to_string(index);
-    out << "  " << rname << " [label=\"λ=" << reaction.rate << "\",shape=\"oval\",fillcolor=\"yellow\",style=\"filled\"];\n";
-    for (const auto& reactant : reaction.reactants) {
-        out << "  " << reactant->name << " -> " << rname << ";\n";
+    Reaction operator+(const Species& a, const Species& b) {
+        return Reaction({ &a, &b});
     }
-    for (const auto& product : reaction.products) {
-        out << "  " << rname << " -> " << product->name << ";\n";
+
+    // (A + B) + C → adds another Species to the list of reactants
+    Reaction operator+(Reaction reaction, const Species& s) { // Er reaction pointer eller ikke?
+        reaction.reactants.push_back(&s);
+        return reaction;
     }
-    return out.str();
-}
+
+    // (A + B) >> 0.01 → sets the reaction rate
+    Reaction operator>>(const Reaction& reaction, const double rate) {
+        return Reaction(reaction.reactants, reaction.products, rate);
+    }
+
+    Reaction operator>>(const Species& species, const double rate) {
+        return Reaction({&species},{}, rate);
+    }
+
+    Reaction operator>>(const Species& species, const int rate) {
+        return Reaction({&species},{}, rate);
+    }
+
+    //((A + B)) >> 0.01 >>= C → completes the reaction and creates a Reaction object
+    Reaction operator>>=(const Reaction& reaction, const Species& product) {
+        return Reaction{ reaction.reactants, { &product }, reaction.rate };
+    }
+
+    Reaction operator>>=(const Reaction& reactionA, const Reaction& reactionB) {
+        return Reaction{ reactionA.reactants, { reactionB.reactants }, reactionA.rate };
+    }
 
 
-std::string to_dot_network(const std::vector<Reaction>& reactions, const std::vector<Species>& species) {
-    std::ostringstream out;
-    out << "digraph {\n";
-    for (size_t i = 0; i < reactions.size(); ++i) {
-        out << to_dot(reactions[i], static_cast<int>(i));
+    std::string to_dot(const Reaction& reaction, const int index) {
+        std::ostringstream out;
+        std::string rname = "r" + std::to_string(index);
+        out << "  " << rname << " [label=\"λ=" << reaction.rate << "\",shape=\"oval\",fillcolor=\"yellow\",style=\"filled\"];\n";
+        for (const auto& reactant : reaction.reactants) {
+            out << "  " << reactant->name << " -> " << rname << ";\n";
+        }
+        for (const auto& product : reaction.products) {
+            out << "  " << rname << " -> " << product->name << ";\n";
+        }
+        return out.str();
     }
-    for (size_t i = 0; i < species.size(); ++i) {
-        out << to_dot(species[i]);
+
+    std::string to_dot(const Species& species) {
+        std::ostringstream out;
+
+        out << "  " << species.name << " [shape=\"rect\",fillcolor=\"cyan\",style=\"filled\"];\n";
+        return out.str();
     }
-    out << "}\n";
-    return out.str();
-}
+
+
+    std::string to_dot_network(const std::vector<Reaction>& reactions, const std::vector<Species>& species) {
+        std::ostringstream out;
+        out << "digraph {\n";
+        for (size_t i = 0; i < reactions.size(); ++i) {
+            out << to_dot(reactions[i], static_cast<int>(i));
+        }
+        for (size_t i = 0; i < species.size(); ++i) {
+            out << to_dot(species[i]);
+        }
+        out << "}\n";
+        return out.str();
+    }
+
 
 
 
