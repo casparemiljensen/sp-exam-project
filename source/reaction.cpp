@@ -23,13 +23,13 @@
 
 
     struct Reaction { // Represents a reaction. E.g. A + C --(λ)--> B + C
-        std::vector<const Species*> reactants; // B, C (output species)
-        std::vector<const Species*> products; // B, C (output species)
+        std::vector<Species> reactants; // B, C (output species)
+        std::vector<Species> products; // B, C (output species)
         const double rate; //The rate λ describes the intrinsic probability of individuals meeting and reacting over one time unit.
-        double delay;
+        double delay = 0.0;
 
-        explicit Reaction(std::vector<const Species*> reactants = {}, std::vector<const Species*> products = {}, const double rate = 0.0)
-               : reactants(std::move(reactants)), products(std::move(products)), rate(rate) {}
+        explicit Reaction(std::vector<Species> reactants = {}, std::vector<Species> products = {}, const double rate = 0.0)
+               : reactants(reactants), products(products), rate(rate) {}
 
         void print() const {
             myPrint(this->to_string());
@@ -40,12 +40,12 @@
         [[nodiscard]] std::string to_string() const {
             std::string out;
             for (size_t i = 0; i < reactants.size(); i++) {
-                out += reactants[i]->name;
+                out += reactants[i].name;
                 if (i < reactants.size() - 1) out += " + ";
             }
             out += " --(" + std::to_string(rate) + ")--> ";
             for (size_t i = 0; i < products.size(); i++) {
-                out += products[i]->name;
+                out += products[i].name;
                 if (i < products.size() - 1) out += " + ";
             }
             return out;
@@ -54,10 +54,11 @@
         // We have a list of reactants.. If they meet (rate), then produce a result (products).
 
         //Uses Vessel quantities as state, can be modified to use external state
-        void calculateDelay() {
+        void calculateDelay()
+        {
             int sum = 1;
-            for (const Species* sp : reactants) {
-                sum *= sp->quantity;
+            for (const Species& sp : reactants) {
+                sum *= sp.quantity;
             }
 
             delay = std::exp(rate * sum);
@@ -71,13 +72,18 @@
     }
 
     Reaction operator+(const Species& a, const Species& b) {
-        return Reaction({ &a, &b});
+        return Reaction({ a, b});
     }
 
     // (A + B) + C → adds another Species to the list of reactants
-    Reaction operator+(Reaction reaction, const Species& s) { // Er reaction pointer eller ikke?
-        reaction.reactants.push_back(&s);
-        return reaction;
+    Reaction operator+(const Reaction& reaction, const Species& species) { // Er reaction pointer eller ikke?
+        // reaction.reactants.push_back(species);
+        // return reaction;
+
+        std::vector<Species> new_reactants = reaction.reactants;
+        new_reactants.push_back(species);
+        return Reaction(new_reactants, reaction.products, reaction.rate);
+
     }
 
     // (A + B) >> 0.01 → sets the reaction rate
@@ -86,16 +92,16 @@
     }
 
     Reaction operator>>(const Species& species, const double rate) {
-        return Reaction({&species},{}, rate);
+        return Reaction({species},{}, rate);
     }
 
     Reaction operator>>(const Species& species, const int rate) {
-        return Reaction({&species},{}, rate);
+        return Reaction({species},{}, rate);
     }
 
     //((A + B)) >> 0.01 >>= C → completes the reaction and creates a Reaction object
     Reaction operator>>=(const Reaction& reaction, const Species& product) {
-        return Reaction{ reaction.reactants, { &product }, reaction.rate };
+        return Reaction{ reaction.reactants, { product }, reaction.rate };
     }
 
     Reaction operator>>=(const Reaction& reactionA, const Reaction& reactionB) {
@@ -108,10 +114,10 @@
         std::string rname = "r" + std::to_string(index);
         out << "  " << rname << " [label=\"λ=" << reaction.rate << "\",shape=\"oval\",fillcolor=\"yellow\",style=\"filled\"];\n";
         for (const auto& reactant : reaction.reactants) {
-            out << "  " << reactant->name << " -> " << rname << ";\n";
+            out << "  " << reactant.name << " -> " << rname << ";\n";
         }
         for (const auto& product : reaction.products) {
-            out << "  " << rname << " -> " << product->name << ";\n";
+            out << "  " << rname << " -> " << product.name << ";\n";
         }
         return out.str();
     }

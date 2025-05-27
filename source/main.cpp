@@ -2,7 +2,11 @@
 #include <sstream>
 #include <fstream>
 #include "symbol_table.cpp"
-#include "vessels.hpp"
+#include "simulator.cpp"
+
+
+
+
 
 int main() {
 
@@ -58,5 +62,11 @@ int main() {
     //out << to_dot_network(vec, vect) << std::endl;
     out.close();
 
+    Vessel covid = seihr(100);
+    auto c = SimulationState();
+
+    Simulator::simulate(10, c, covid);
+
     return 0;
 }
+

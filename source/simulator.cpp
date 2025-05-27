@@ -5,14 +5,12 @@
 #include "vessels.hpp"
 #include "state.hpp"
 
-class simulator {
-    std::vector<Reaction> reactions;
-    std::vector<Species> species;
+class Simulator {
+    //std::vector<Reaction> reactions;
+    //std::vector<Species> species;
 
 
 public:
-
-
     /* INPUT
      *  - reactions: from field
      *  - endtime: from params
@@ -21,7 +19,7 @@ public:
      */
 
 
-    void simulate(float endtime, SimulationState state)
+    static void simulate(float endtime, SimulationState state, Vessel<Species> vessel)
     {
         // Each time the simulation advances:
             // trajectory.push_back({current_time, species});
@@ -29,22 +27,23 @@ public:
         float t = 0;
 
         while (t < endtime) {
-            for (auto& reaction : reactions) {
+            for (auto& reaction : vessel.get_reactions()) {
                 // for each reaction compute delay
                 reaction.calculateDelay();
             }
-            const auto r = getSmallestDelay();
+            std::cout << "test" << std::endl;
+            auto r = getSmallestDelay(vessel);
             t += r.delay;
 
             if (!allReactantsQuantitiesLargerThanZero(r))
                 continue;
 
             for (auto& species : r.reactants) {
-                species->quantity -= 1;
+                species.quantity -= 1;
             }
             // For each reactant
             for (auto& product : r.products) {
-                product->quantity += 1;
+                product.quantity += 1;
             }
         }
 
@@ -55,16 +54,17 @@ public:
     // For smallest reaction (reaction with smallest delay) all reactants (species) must have a quantity of x>0 (otherwise they can't create a reaction)
 
 
-    bool allReactantsQuantitiesLargerThanZero(const Reaction& reaction) {
+    static bool allReactantsQuantitiesLargerThanZero(const Reaction& reaction) {
         for (auto& species : reaction.reactants) {
-            if (species->quantity <= 0)
+            if (species.quantity <= 0)
                 return false;
         }
         return true;
     }
 
 
-    const Reaction& getSmallestDelay() {
+    static const Reaction& getSmallestDelay(Vessel<Species>& vessel) {
+        auto& reactions = vessel.get_reactions();
         const Reaction* smallestReaction = &reactions[0];
         double smallest = reactions[0].delay;
 

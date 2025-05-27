@@ -45,5 +45,7 @@ Notes
 
 
 TODO
+- FIX Process finished with exit code 139 (interrupted by signal 11:SIGSEGV)
 - Investigate why mutable on line 16 in reaction.cpp works/fix!
 - Find out if we need state
+- 

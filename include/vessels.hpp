@@ -6,12 +6,11 @@
 #include "symbol_table.hpp"
 #include "../source/reaction.cpp"
 // Todo Move implementation to cpp
+template<typename Value>
 class Vessel {
-    SymbolTable<std::string, Species> species;
+    SymbolTable<std::string, Value> species;
     std::vector<Reaction> reactions;
     std::string name;
-
-private:
     Species _env = Species("env");
 
 
@@ -22,7 +21,7 @@ public:
         return species.add(name, Species(name, amount));
     }
 
-    void add(const Reaction& reaction) {
+    void add(const Reaction reaction) {
         reactions.push_back(reaction);
     }
 
@@ -30,17 +29,17 @@ public:
         return _env;
     }
 
-    std::vector<Reaction> get_reactions() const {
+    std::vector<Reaction>& get_reactions() {
         return reactions;
     }
 
-    std::vector<Species> get_species() const {
+    const std::vector<Species>& get_species() {
         return species.getValues();
     }
 };
 
 
-Vessel circadian_rhythm()
+Vessel<Species> circadian_rhythm()
 {
     constexpr auto alphaA = 50;
     constexpr auto alpha_A = 500;
@@ -57,7 +56,7 @@ Vessel circadian_rhythm()
     constexpr auto deltaMR = 0.5;
     constexpr auto thetaA = 50;
     constexpr auto thetaR = 100;
-    auto v = Vessel{"Circadian Rhythm"};
+    auto v = Vessel<Species>{"Circadian Rhythm"};
     const auto env = v.environment();
     const auto DA = v.add("DA", 1);
     const auto D_A = v.add("D_A", 0);
