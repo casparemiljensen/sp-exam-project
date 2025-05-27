@@ -2,8 +2,6 @@
 #include "reaction.cpp" // Should be HPP!!!
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
-
     // Species A("A");
     // Species B("B");
     // Species C("C");
