@@ -41,8 +41,9 @@ Simulator
 
 
 Notes
-    // Dont use auto for input types
-
+- Dont use auto for input types
+- We cant have references in vectors
+- Dereference: *Reaction or &Reaction
 
 TODO
 - FIX Process finished with exit code 139 (interrupted by signal 11:SIGSEGV)

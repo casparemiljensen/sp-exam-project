@@ -86,6 +86,14 @@
 
     }
 
+// Reaction operator+(const Reaction& reaction, const Species& species) {
+//         std::vector<const Species&> new_reactants = reaction.reactants;
+//         new_reactants.push_back(species);
+//         return Reaction(new_reactants, reaction.products, reaction.rate);
+//     }
+
+
+
     // (A + B) >> 0.01 → sets the reaction rate
     Reaction operator>>(const Reaction& reaction, const double rate) {
         return Reaction(reaction.reactants, reaction.products, rate);
