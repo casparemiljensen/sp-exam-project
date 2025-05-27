@@ -1,8 +1,13 @@
 #include <string>
 #include <vector>
 #include "reaction.hpp"
-
+#include <sstream>
 #include <iostream>
+#include <set>
+
+void myPrint(std::string s) {
+    std::cout << s << std::endl;
+}
 
 struct Species {
     std::string name;
@@ -14,49 +19,89 @@ struct Species {
 
 
 struct Reaction { // Represents a reaction. E.g. A + C --(λ)--> B + C
-    std::vector<Species> reactants; // A, C (Input species)
-    std::vector<Species> products; // B, C (output species)
+    std::vector<Species*> reactants; // A, C (Input species)
+    std::vector<Species*> products; // B, C (output species)
     double rate; //The rate λ describes the intrinsic probability of individuals meeting and reacting over one time unit.
 
-    // Reaction(std::vector<Species*> reactants = {}, std::vector<Species*> products = {}, double rate = 0.0)
-    //         : reactants(std::move(reactants)), products(std::move(products)), rate(rate) {}
+    Reaction(std::vector<Species*> reactants = {}, std::vector<Species*> products = {}, double rate = 0.0)
+           : reactants(std::move(reactants)), products(std::move(products)), rate(rate) {}
 
     void print() {
-        for (size_t i = 0; i < reactants.size(); ++i) {
-            std::cout << reactants[i].name;
-            if (i < reactants.size() - 1) std::cout << " + ";
+        myPrint(this->to_string());
+    }
+    // -> is dereference
+
+    std::string to_string()
+    {
+        std::string out = "";
+        for (size_t i = 0; i < reactants.size(); i++) {
+            out += reactants[i]->name;
+            if (i < reactants.size() - 1) out += " + ";
         }
-        std::cout << " --(" << rate << ")--> ";
-        for (size_t i = 0; i < products.size(); ++i) {
-            std::cout << products[i].name;
-            if (i < products.size() - 1) std::cout << " + ";
+        out += " --(" + std::to_string(rate) + ")--> ";
+        for (size_t i = 0; i < products.size(); i++) {
+            out += products[i]->name;
+            if (i < products.size() - 1) out += " + ";
         }
-        std::cout << "\n";
+        return out;
     }
     // We have a list of reactants.. If they meet (rate), then produce a result (products).
 };
 
-Reaction operator+(Species a, Species b) {
-    return Reaction({ a, b});
+
+std::ostream& operator<<(std::ostream& os, const Species& s) {
+    os << "Species(name=" << s.name << ")";
+    return os;
+}
+
+Reaction operator+(Species& a, Species& b) {
+    return Reaction({ &a, &b});
 }
 
 // (A + B) + C → adds another Species to the list of reactants
-Reaction operator+(Reaction builder, Species s) {
-    builder.reactants.push_back(s);
-    return builder;
+Reaction operator+(Reaction reaction, Species& s) { // Er reaction pointer eller ikke?
+    reaction.reactants.push_back(&s);
+    return reaction;
 }
 
 // (A + B) >> 0.01 → sets the reaction rate
-Reaction operator>>(Reaction builder, double rate) {
-    builder.rate = rate;
-    return builder;
+Reaction operator>>(Reaction reaction, double rate) {
+    reaction.rate = rate;
+    return reaction;
 }
 
 //((A + B)) >> 0.01 >>= C → completes the reaction and creates a Reaction object
-Reaction operator>>=(Reaction builder, Species product) {
-    return Reaction{ builder.reactants, { product}, builder.rate };
+Reaction operator>>=(Reaction reaction, Species& product) {
+    return Reaction{ reaction.reactants, { &product }, reaction.rate };
 }
 
+
+std::string to_dot(const Reaction& reaction, int index) {
+    std::ostringstream out;
+    std::string rname = "r" + std::to_string(index);
+    out << "  " << rname << " [label=\"λ=" << reaction.rate << "\",shape=\"oval\",fillcolor=\"yellow\",style=\"filled\"];\n";
+    for (const auto& reactant : reaction.reactants) {
+        out << "  " << reactant->name << " -> " << rname << ";\n";
+    }
+    for (const auto& product : reaction.products) {
+        out << "  " << rname << " -> " << product->name << ";\n";
+    }
+    return out.str();
+}
+
+
+std::string to_dot_network(const std::vector<Reaction>& reactions, const std::vector<Species>& species) {
+    std::ostringstream out;
+    out << "digraph {\n";
+    for (size_t i = 0; i < reactions.size(); ++i) {
+        out << to_dot(reactions[i], static_cast<int>(i));
+    }
+    for (size_t i = 0; i < species.size(); ++i) {
+        out << to_dot(species[i]);
+    }
+    out << "}\n";
+    return out.str();
+}
 
 
 

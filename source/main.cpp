@@ -2,6 +2,7 @@
 #include "reaction.cpp" // Should be HPP!!!
 
 int main() {
+
     // Species A("A");
     // Species B("B");
     // Species C("C");
@@ -28,10 +29,17 @@ int main() {
     // r3.print();  // Expected: A --(0.02)--> B
 
     // Test 4: Use temporary Species directly
-    Reaction r4 = (Species("X") + Species("Y")) >> 0.1 >>= Species("Z");
-    std::cout << "Reaction 4: ";
-    r4.print();  // Expected: X + Y --(0.1)--> Z
+    //Reaction r4 = (Species("X") + Species("Y")) >> 0.1 >>= Species("Z");
+    //std::cout << "Reaction 4: ";
+    //r4.print();  // Expected: X + Y --(0.1)--> Z
+    std::vector<Reaction> vec = {r1, r2};
+    std::vector<Species> vect = {A, B, C, D};
 
+
+    std::string path = "C:\\Software\\c++\\sp-exam-project\\";
+    std::ofstream out(path + "network.dot");
+    out << to_dot_network(vec, vect);
+    out.close();
 
     return 0;
 }
