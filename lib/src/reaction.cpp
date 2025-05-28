@@ -6,7 +6,7 @@
 #include <sstream>
 #include <iostream>
 
-
+namespace StochasticSimulation {
     void myPrint(const std::string& s) {
         std::cout << s << std::endl;
     }
@@ -86,11 +86,11 @@
 
     }
 
-// Reaction operator+(const Reaction& reaction, const Species& species) {
-//         std::vector<const Species&> new_reactants = reaction.reactants;
-//         new_reactants.push_back(species);
-//         return Reaction(new_reactants, reaction.products, reaction.rate);
-//     }
+    // Reaction operator+(const Reaction& reaction, const Species& species) {
+    //         std::vector<const Species&> new_reactants = reaction.reactants;
+    //         new_reactants.push_back(species);
+    //         return Reaction(new_reactants, reaction.products, reaction.rate);
+    //     }
 
 
 
@@ -150,8 +150,7 @@
         out << "}\n";
         return out.str();
     }
-
-
+}
 
 
 

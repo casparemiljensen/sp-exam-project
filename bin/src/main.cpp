@@ -1,12 +1,14 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
-#include "symbol_table.cpp"
-#include "simulator.cpp"
 
+#include "../../lib/examples/circadian_rythm.hpp"
+#include "../../lib/examples/covid-19.hpp"
+#include "../../lib/examples/exponential_decay.hpp"
+#include "../../lib/include/simulator.hpp"
 
-
-
+using namespace StochasticSimulation;
+using namespace StochasticSimulation::Examples;
 
 int main() {
 
@@ -47,25 +49,28 @@ int main() {
     // r4.print();  // Expected: X + Y --(0.1)--> Z
 
 
-    std::vector<Reaction> vec = {r1, r2, r3, r4};
-    std::vector<Species> vect = {A, B, C, D};
+    std::vector vec = {r1, r2, r3, r4};
+    std::vector vect = {A, B, C, D};
 
 
-    Vessel testVessel = circadian_rhythm();
+    Vessel circadian_rythm = circadian_rhythm();
 
+    Vessel covid_19 = seihr(1000);
+
+    Vessel exponential_decay_a = exponential_decay(100,0,1);
+    Vessel exponential_decay_b = exponential_decay(100,0,2);
+    Vessel exponential_decay_c = exponential_decay(50,50,1);
 
     std::string path = "/home/wired/dev/SP/sp-exam-project/";
     std::ofstream out(path + "network.dot");
-    auto a = testVessel.get_species();
-    auto b = testVessel.get_reactions();
-    out << to_dot_network(b, a) << std::endl;
+    out << to_dot_network(circadian_rythm.get_reactions(), circadian_rythm.get_species()) << std::endl;
     //out << to_dot_network(vec, vect) << std::endl;
     out.close();
 
     Vessel covid = seihr(100);
     auto c = SimulationState();
 
-    Simulator::simulate(10, c, covid);
+    Simulator::simulate(1500, c, exponential_decay_a);
 
     return 0;
 }

@@ -6,6 +6,9 @@ add_library(stochastic-simulation
         observer.cpp
         random.cpp
         agent.cpp
+        ../examples/circadian_rythm.hpp
+        ../examples/covid-19.hpp
+        ../examples/exponential_decay.hpp
 )
 
 #include_directories will tell to the compiler where to look for the header files, in this case, the header files for the boost library.
@@ -17,7 +20,7 @@ add_library(stochastic-simulation
 
 ## Make sure it can see the headers from include/
 target_include_directories(stochastic-simulation
-        PUBLIC ${PROJECT_SOURCE_DIR}/include
+        PUBLIC ../include
 )
 
 

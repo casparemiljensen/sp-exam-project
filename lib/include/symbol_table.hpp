@@ -2,11 +2,10 @@
 #define SYMBOL_TABLE_HPP
 
 #include <stdexcept>
-
 #include "symbol_table.hpp"
 #include <unordered_map>
 #include <vector>
-
+namespace StochasticSimulation {
     template<typename Key, typename Value>
     class SymbolTable
     {
@@ -37,6 +36,5 @@
             return values;
         }
     };
-
-
+}
 #endif //SYMBOL_TABLE_HPP

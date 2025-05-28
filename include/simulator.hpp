@@ -1,4 +1,0 @@
-#ifndef SIMULATORE_HPP
-#define SIMULATORE_HPP
-
-#endif //SIMULATORE_HPP

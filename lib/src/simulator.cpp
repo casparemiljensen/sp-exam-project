@@ -5,21 +5,8 @@
 #include "vessels.hpp"
 #include "state.hpp"
 
-class Simulator {
-    //std::vector<Reaction> reactions;
-    //std::vector<Species> species;
-
-
-public:
-    /* INPUT
-     *  - reactions: from field
-     *  - endtime: from params
-     *  - simulationstate: from params
-     *      - with amount Qi of reactant i
-     */
-
-
-    static void simulate(float endtime, SimulationState state, Vessel<Species> vessel)
+namespace StochasticSimulation {
+    void Simulator::simulate(float endtime, SimulationState state, Vessel vessel)
     {
         // Each time the simulation advances:
             // trajectory.push_back({current_time, species});
@@ -31,7 +18,6 @@ public:
                 // for each reaction compute delay
                 reaction.calculateDelay();
             }
-            std::cout << "test" << std::endl;
             auto r = getSmallestDelay(vessel);
             t += r.delay;
 
@@ -51,10 +37,10 @@ public:
 
     }
 
-    // For smallest reaction (reaction with smallest delay) all reactants (species) must have a quantity of x>0 (otherwise they can't create a reaction)
+        // For smallest reaction (reaction with smallest delay) all reactants (species) must have a quantity of x>0 (otherwise they can't create a reaction)
 
 
-    static bool allReactantsQuantitiesLargerThanZero(const Reaction& reaction) {
+    bool Simulator::allReactantsQuantitiesLargerThanZero(const Reaction& reaction) {
         for (auto& species : reaction.reactants) {
             if (species.quantity <= 0)
                 return false;
@@ -63,7 +49,7 @@ public:
     }
 
 
-    static const Reaction& getSmallestDelay(Vessel<Species>& vessel) {
+    const Reaction& Simulator::getSmallestDelay(Vessel& vessel) {
         auto& reactions = vessel.get_reactions();
         const Reaction* smallestReaction = &reactions[0];
         double smallest = reactions[0].delay;
@@ -78,6 +64,7 @@ public:
     }
     // void simulateFrame()
 };
+
 
 
 // TASKS
