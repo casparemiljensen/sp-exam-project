@@ -4,7 +4,7 @@
 #include <utility>
 
 #include "symbol_table.hpp"
-#include "../src/reaction.cpp"
+#include "reaction.hpp"
 // Todo Move implementation to cpp
 
 namespace StochasticSimulation {

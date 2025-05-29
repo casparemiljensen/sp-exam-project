@@ -4,7 +4,7 @@
 #include "vessels.hpp"
 
 namespace StochasticSimulation::Examples {
-    inline Vessel circadian_rhythm()
+    Vessel circadian_rhythm()
     {
         constexpr auto alphaA = 50;
         constexpr auto alpha_A = 500;

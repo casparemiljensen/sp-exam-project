@@ -2,11 +2,6 @@
 #include <sstream>
 #include <fstream>
 
-// #include "../../lib/examples/circadian_rythm.hpp"
-// #include "../../lib/examples/covid-19.hpp"
-// #include "../../lib/examples/exponential_decay.hpp"
-// #include "../../lib/include/simulator.hpp"
-
 #include "circadian_rythm.hpp"
 #include "covid-19.hpp"
 #include "exponential_decay.hpp"
@@ -60,8 +55,6 @@ int main() {
 
     Vessel circadian_rythm = circadian_rhythm();
 
-    Vessel covid_19 = seihr(1000);
-
     Vessel exponential_decay_a = exponential_decay(100,0,1);
     Vessel exponential_decay_b = exponential_decay(100,0,2);
     Vessel exponential_decay_c = exponential_decay(50,50,1);
@@ -70,7 +63,7 @@ int main() {
     std::string path = "/Software/c++/sp-exam-project";
     std::ofstream out(path + "network.dot");
     out << to_dot_network(circadian_rythm.get_reactions(), circadian_rythm.get_species()) << std::endl;
-    //out << to_dot_network(vec, vect) << std::endl;
+    out << to_dot_network(vec, vect) << std::endl;
     out.close();
 
     Vessel covid = seihr(100);

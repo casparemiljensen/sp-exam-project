@@ -3,7 +3,7 @@
 #include "vessels.hpp"
 
 namespace StochasticSimulation::Examples {
-    inline Vessel exponential_decay(uint32_t q_a, uint32_t q_b, uint32_t q_c) {
+    Vessel exponential_decay(uint32_t q_a, uint32_t q_b, uint32_t q_c) {
         auto v = Vessel{"Exponential Decay"};
 
         constexpr auto rate = 0.001;
