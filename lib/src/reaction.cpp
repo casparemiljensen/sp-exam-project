@@ -6,6 +6,8 @@
 #include <sstream>
 #include <iostream>
 
+#include "state.hpp"
+
 namespace StochasticSimulation {
     void myPrint(const std::string& s) {
         std::cout << s << std::endl;
@@ -42,11 +44,11 @@ namespace StochasticSimulation {
         // We have a list of reactants.. If they meet (rate), then produce a result (products).
 
         //Uses Vessel quantities as state, can be modified to use external state
-    void Reaction::calculateDelay()
+    void Reaction::calculateDelay(SimulationState& state)
     {
         int sum = 1;
         for (const Species& sp : reactants) {
-            sum *= sp.quantity;
+            sum *= state.species.get(sp.name).quantity;
         }
 
         delay = std::exp(rate * sum);

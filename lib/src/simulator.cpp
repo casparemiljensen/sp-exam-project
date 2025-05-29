@@ -6,30 +6,29 @@
 #include "state.hpp"
 
 namespace StochasticSimulation {
-    void Simulator::simulate(float endtime, SimulationState state, Vessel vessel)
+    void Simulator::simulate(float endtime, SimulationState& state, Vessel vessel, std::vector<TimeStep>& trajectory)
     {
         // Each time the simulation advances:
             // trajectory.push_back({current_time, species});
 
-        float t = 0;
 
-        while (t < endtime) {
+        while (state.time < endtime) {
             for (auto& reaction : vessel.get_reactions()) {
                 // for each reaction compute delay
-                reaction.calculateDelay();
+                reaction.calculateDelay(state);
             }
             auto r = getSmallestDelay(vessel);
-            t += r.delay;
+            state.time += r.delay;
 
             if (!allReactantsQuantitiesLargerThanZero(r))
                 continue;
 
             for (auto& species : r.reactants) {
-                species.quantity -= 1;
+                state.species.get(species.name).quantity -= 1;
             }
             // For each reactant
             for (auto& product : r.products) {
-                product.quantity += 1;
+                state.species.get(product.name).quantity += 1;
             }
         }
 

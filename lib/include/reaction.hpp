@@ -5,19 +5,14 @@
 #include <string>
 #include <vector>
 #include <sstream>
-#include <cmath>
+
+#include "species.hpp"
 
 namespace StochasticSimulation {
-
+    struct SimulationState;
     void myPrint(const std::string& s);
 
-    struct Species {
-        std::string name;
-        mutable int quantity;
 
-        explicit Species(std::string name, int quantity = 0);
-        Species();
-    };
 
     struct Reaction {
         std::vector<Species> reactants;
@@ -25,10 +20,10 @@ namespace StochasticSimulation {
         const double rate;
         double delay = 0.0;
 
-        explicit Reaction(std::vector<Species> reactants = {}, std::vector<Species> products = {}, const double rate = 0.0);
+        explicit Reaction(std::vector<Species> reactants = {}, std::vector<Species> products = {}, double rate = 0.0);
         void print() const;
         [[nodiscard]] std::string to_string() const;
-        void calculateDelay();
+        void calculateDelay(SimulationState&);
     };
 
     std::ostream& operator<<(std::ostream& os, const Species& s);

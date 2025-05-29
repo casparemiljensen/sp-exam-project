@@ -1,9 +1,11 @@
 #ifndef COVID_19_HPP
 #define COVID_19_HPP
+#include <cmath>
+
 #include "vessels.hpp"
 
 namespace StochasticSimulation::Examples {
-    inline Vessel seihr(uint32_t N)
+    Vessel seihr(uint32_t N)
     {
         auto v = Vessel{"COVID19 SEIHR: " + std::to_string(N)};
         const auto eps = 0.0009; // initial fraction of infectious

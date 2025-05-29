@@ -5,7 +5,9 @@
 
 #include "symbol_table.hpp"
 #include "reaction.hpp"
-// Todo Move implementation to cpp
+#include <vector>
+
+#include "state.hpp"
 
 namespace StochasticSimulation {
     class Vessel {
@@ -36,6 +38,10 @@ namespace StochasticSimulation {
 
         std::vector<Species> get_species() {
             return species.getValues();
+        }
+
+        SimulationState createSimulationState() {
+            return SimulationState(species);
         }
     };
 

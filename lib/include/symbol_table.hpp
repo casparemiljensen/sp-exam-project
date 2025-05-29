@@ -19,8 +19,8 @@ namespace StochasticSimulation {
             return value;
         }
 
-        const Value& get(const Key& key) {
-            if (!table.contains(key)) throw std::out_of_range("Key not found");
+        Value& get(const Key& key) {
+            if (!table.contains(key)) throw std::out_of_range("Key not found, passed wrong state to simulator?");
             return table.at(key);
         }
 

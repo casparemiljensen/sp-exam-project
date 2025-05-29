@@ -67,10 +67,10 @@ int main() {
     out.close();
 
     Vessel covid = seihr(100);
-    auto c = SimulationState();
+    auto c = covid.createSimulationState();
+    std::vector<TimeStep> trajectory;
 
-    Simulator::simulate(1500, c, exponential_decay_a);
+    Simulator::simulate(1500, c, covid, trajectory);
 
     return 0;
 }
-
