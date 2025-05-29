@@ -2,10 +2,15 @@
 #include <sstream>
 #include <fstream>
 
-#include "../../lib/examples/circadian_rythm.hpp"
-#include "../../lib/examples/covid-19.hpp"
-#include "../../lib/examples/exponential_decay.hpp"
-#include "../../lib/include/simulator.hpp"
+// #include "../../lib/examples/circadian_rythm.hpp"
+// #include "../../lib/examples/covid-19.hpp"
+// #include "../../lib/examples/exponential_decay.hpp"
+// #include "../../lib/include/simulator.hpp"
+
+#include "circadian_rythm.hpp"
+#include "covid-19.hpp"
+#include "exponential_decay.hpp"
+#include "simulator.hpp"
 
 using namespace StochasticSimulation;
 using namespace StochasticSimulation::Examples;
@@ -61,7 +66,8 @@ int main() {
     Vessel exponential_decay_b = exponential_decay(100,0,2);
     Vessel exponential_decay_c = exponential_decay(50,50,1);
 
-    std::string path = "/home/wired/dev/SP/sp-exam-project/";
+    // std::string path = "/home/wired/dev/SP/sp-exam-project/";
+    std::string path = "/Software/c++/sp-exam-project";
     std::ofstream out(path + "network.dot");
     out << to_dot_network(circadian_rythm.get_reactions(), circadian_rythm.get_species()) << std::endl;
     //out << to_dot_network(vec, vect) << std::endl;

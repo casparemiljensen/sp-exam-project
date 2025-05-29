@@ -1,27 +1,23 @@
 # Build the core library
-add_library(stochastic-simulation
+add_library(stochastic-simulation STATIC
         simulator.cpp
         reaction.cpp
         state.cpp
         observer.cpp
         random.cpp
         agent.cpp
-        ../examples/circadian_rythm.hpp
-        ../examples/covid-19.hpp
-        ../examples/exponential_decay.hpp
+        ../examples/circadian_rythm.cpp
+        ../examples/covid-19.cpp
+        ../examples/exponential_decay.cpp
 )
 
-#include_directories will tell to the compiler where to look for the header files, in this case, the header files for the boost library.
-#
-#target_link_libraries will tell to the linker which libraries you want to link against your executable.
-#
-#While headers will provide (most of the time) just the interface to access the library, the library itself is precompiled and linked to your application.
-
-
-## Make sure it can see the headers from include/
+# Sørg for at dit include virker
 target_include_directories(stochastic-simulation
-        PUBLIC ../include
+        PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/../include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../examples
 )
+
 
 
 

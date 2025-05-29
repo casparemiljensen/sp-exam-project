@@ -1,19 +1,13 @@
 #ifndef EXPONENTIAL_DECAY_HPP
 #define EXPONENTIAL_DECAY_HPP
+
+// Include necessary headers for the declaration.
 #include "vessels.hpp"
+#include <cstdint> // For uint32_t
 
 namespace StochasticSimulation::Examples {
-    inline Vessel exponential_decay(uint32_t q_a, uint32_t q_b, uint32_t q_c) {
-        auto v = Vessel{"Exponential Decay"};
+    // Declare the function. Remember to remove 'inline' here.
+    Vessel exponential_decay(uint32_t q_a, uint32_t q_b, uint32_t q_c);
+} // namespace StochasticSimulation::Examples
 
-        constexpr auto rate = 0.001;
-        const auto A = v.add("A", q_a);
-        const auto B = v.add("B", q_b);
-        const auto C = v.add("C", q_c);
-
-        v.add((A + B) >> rate >>= B + C);
-        return v;
-    }
-}
-
-#endif //EXPONENTIAL_DECAY_HPP
+#endif // EXPONENTIAL_DECAY_HPP
