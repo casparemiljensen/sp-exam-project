@@ -35,6 +35,11 @@ namespace StochasticSimulation {
             }
             return values;
         }
+
+        auto begin() { return table.begin(); }
+        auto end() { return table.end(); }
+        auto begin() const { return table.begin(); }
+        auto end() const { return table.end(); }
     };
 }
 #endif //SYMBOL_TABLE_HPP

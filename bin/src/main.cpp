@@ -68,7 +68,7 @@ int main() {
 
     Vessel covid = seihr(100);
     auto c = covid.createSimulationState();
-    std::vector<TimeStep> trajectory;
+    std::vector<SimulationState> trajectory;
 
     Simulator::simulate(1500, c, covid, trajectory);
 

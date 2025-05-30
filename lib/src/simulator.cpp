@@ -6,7 +6,7 @@
 #include "state.hpp"
 
 namespace StochasticSimulation {
-    void Simulator::simulate(float endtime, SimulationState& state, Vessel vessel, std::vector<TimeStep>& trajectory)
+    void Simulator::simulate(float endtime, SimulationState& state, Vessel vessel, std::vector<SimulationState>& trajectory)
     {
         // Each time the simulation advances:
             // trajectory.push_back({current_time, species});
@@ -50,6 +50,9 @@ namespace StochasticSimulation {
 
     const Reaction& Simulator::getSmallestDelay(Vessel& vessel) {
         auto& reactions = vessel.get_reactions();
+        if (reactions.empty()) {
+            throw std::runtime_error("No reactions in vessel");
+        }
         const Reaction* smallestReaction = &reactions[0];
         double smallest = reactions[0].delay;
 

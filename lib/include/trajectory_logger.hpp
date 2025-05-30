@@ -8,7 +8,6 @@
 #include "species.hpp"
 
 namespace StochasticSimulation {
-
     struct TimeStep {
         double time = 0.0;
         std::unordered_map<std::string, int> speciesQuantities;

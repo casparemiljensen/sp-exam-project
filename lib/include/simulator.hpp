@@ -9,7 +9,7 @@ namespace StochasticSimulation {
 
     class Simulator {
     public:
-        static void simulate(float endtime, SimulationState& state, Vessel vessel, std::vector<TimeStep>& trajectory);
+        static void simulate(float endtime, SimulationState& state, Vessel vessel, std::vector<SimulationState>& trajectory);
 
     private:
         static bool allReactantsQuantitiesLargerThanZero(const Reaction& reaction);
