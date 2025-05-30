@@ -10,7 +10,6 @@
 #include "simulator.hpp"
 
 using namespace StochasticSimulation;
-using namespace StochasticSimulation::Examples;
 
 void runSimulations(float endtime, Vessel& baseVessel);
 
@@ -56,19 +55,42 @@ int main() {
     out.close();
 
 
-    estimate_peak_hospitalized();
+    Examples::estimate_peak_hospitalized();
 
 
     // Create chart widget and set data
-    auto traj = run_covid_sim();
+    auto traj = Examples::run_covid_sim();
     //TrajectoryChartWidget chartWidget;
     //Charter::showChart(traj, 800, 600, "Covid Simulation Trajectory");
 
     //Requirement 8
-    auto vessel = seihr(20000);
+    auto vessel = Examples::seihr(20000);
 
-    StochasticSimulator::Examples::getPeakAverage(1500, vessel, 100);
+    Examples::getPeakAverage(1500, vessel, 1);
 
+
+    auto peak_vessel_serial = Examples::seihr(20000);
+    auto peak_state_serial = peak_vessel_serial.createSimulationState();
+    auto peak_serial_observer = [](const SimulationState& state) {
+        thread_local int peakH = 0;
+        if  (state.species.get("H").quantity > peakH)
+            peakH = state.species.get("H").quantity;
+        return peakH;
+    };
+
+    std::vector<int> peaks_serial;
+    //Simulator::simulate(1500, c, covid, test);
+    for (int i = 0; i < 100; i++) {
+        auto vessel_serial = peak_vessel_serial;
+        auto state_serial = peak_state_serial;
+        peaks_serial.emplace_back(Simulator::simulate_observer<int>(1500, state_serial, vessel_serial, peak_serial_observer));
+    }
+
+    int sum = 0;
+    for (int a : peaks_serial)
+        sum += a;
+    float average = static_cast<float>(sum) / peaks_serial.size();
+    std::cout << "Average sum(" << sum <<") serial Peak: " << average << std::endl;
     // TrajectoryChartWidget chartWidget;
     // chartWidget.setTrajectory(traj);
     // chartWidget.resize(800, 600);

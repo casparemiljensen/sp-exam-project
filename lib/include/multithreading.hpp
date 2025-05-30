@@ -30,8 +30,10 @@ namespace StochasticSimulation {
 
                 futures.emplace_back(std::async(std::launch::async,
                     [endtime, state = std::move(state), vesselCopy = std::move(vesselCopy), observer]() mutable { // TODO: Why mutable?
-                        return Simulator::simulate_observer<observerReturnType>(endtime, state, vesselCopy, observer); // Pass reserver into simulation, and return observer
-                    }));
+
+                        auto a = Simulator::simulate_observer<observerReturnType>(endtime, state, vesselCopy, observer); // Pass reserver into simulation, and return observer
+                        return a;
+                }));
             }
 
             std::vector<observerReturnType> observerResults; // Accumulate oberverResults in a vector
