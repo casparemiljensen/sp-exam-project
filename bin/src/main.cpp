@@ -5,10 +5,14 @@
 #include "circadian_rythm.hpp"
 #include "covid-19.hpp"
 #include "exponential_decay.hpp"
+#include "multithreading.hpp"
+#include "mutli_threading.hpp"
 #include "simulator.hpp"
 
 using namespace StochasticSimulation;
 using namespace StochasticSimulation::Examples;
+
+void runSimulations(float endtime, Vessel& baseVessel);
 
 int main() {
 
@@ -58,7 +62,12 @@ int main() {
     // Create chart widget and set data
     auto traj = run_covid_sim();
     //TrajectoryChartWidget chartWidget;
-    Charter::showChart(traj, 800, 600, "Covid Simulation Trajectory");
+    //Charter::showChart(traj, 800, 600, "Covid Simulation Trajectory");
+
+    //Requirement 8
+    auto vessel = seihr(20000);
+
+    StochasticSimulator::Examples::getPeakAverage(1500, vessel, 100);
 
     // TrajectoryChartWidget chartWidget;
     // chartWidget.setTrajectory(traj);
@@ -69,3 +78,4 @@ int main() {
 
     // return 0;
 }
+

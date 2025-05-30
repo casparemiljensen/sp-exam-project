@@ -8,38 +8,7 @@
 #include "state.hpp"
 
 namespace StochasticSimulation {
-    // Implements observer
-    void Simulator::simulate(float endtime, SimulationState& state, Vessel vessel, const std::function<void(SimulationState)>& observer)
-    {
-        observer(state);
-        // Each time the simulation advances:
-            // trajectory.push_back({current_time, species});
 
-
-        while (state.time < endtime) {
-            for (auto& reaction : vessel.get_reactions()) {
-                // for each reaction compute delay
-                reaction.calculateDelay(state);
-            }
-            auto r = getSmallestDelay(vessel);
-            if (r.delay == std::numeric_limits<double>::infinity()) {
-                std::cout << "No valid reactions left — simulation stopping." << std::endl;
-                break;
-            }
-            state.time += r.delay;
-
-            if (!allReactantsQuantitiesLargerThanZero(r))
-                continue;
-
-            for (auto& species : r.reactants) {
-                state.species.get(species.name).quantity -= 1;
-            }
-            // For each reactant
-            for (auto& product : r.products) {
-                state.species.get(product.name).quantity += 1;
-            }
-        }
-    }
 
     // Implements Lazy evaluation through coroutine. Only works in version > c++ 23
     // Generator = C++ lazy evaluation (generates a sequence of elements by repeatedly resuming the coroutine from which it was returned.)
