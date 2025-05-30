@@ -66,31 +66,12 @@ int main(int argc, char *argv[]) {
     //Requirement 8
     auto vessel = Examples::seihr(20000);
 
-    Examples::getPeakAverage(1500, vessel, 1);
+    Examples::getPeakAverage(1500, vessel, 100);
+
+    std::cout << "Test " << std::endl;
 
 
-    auto peak_vessel_serial = Examples::seihr(20000);
-    auto peak_state_serial = peak_vessel_serial.createSimulationState();
-    auto peak_serial_observer = [](const SimulationState& state) {
-        thread_local int peakH = 0;
-        if  (state.species.get("H").quantity > peakH)
-            peakH = state.species.get("H").quantity;
-        return peakH;
-    };
 
-    std::vector<int> peaks_serial;
-    //Simulator::simulate(1500, c, covid, test);
-    for (int i = 0; i < 100; i++) {
-        auto vessel_serial = peak_vessel_serial;
-        auto state_serial = peak_state_serial;
-        peaks_serial.emplace_back(Simulator::simulate_observer<int>(1500, state_serial, vessel_serial, peak_serial_observer));
-    }
-
-    int sum = 0;
-    for (int a : peaks_serial)
-        sum += a;
-    float average = static_cast<float>(sum) / peaks_serial.size();
-    std::cout << "Average sum(" << sum <<") serial Peak: " << average << std::endl;
     // TrajectoryChartWidget chartWidget;
     // chartWidget.setTrajectory(traj);
     // chartWidget.resize(800, 600);

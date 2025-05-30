@@ -68,7 +68,7 @@ TODO
 - Avoid copying (Don't create a bunch of unnecessary copies of objects etc.). 
 - Const correctness. Try to use const as much as possible, but still think if it is reasonable to do.
 - Pay attention to safety and performance when writing in C++ (should be on the top of our mind always).
-
+- Find alternative to <generator> or create a custom generator header file to include since it doesnt work on windows)
 
 Bugs (Fixed)
 - Segmentation Fault in vessels.hpp - returned Species& changed to Species
