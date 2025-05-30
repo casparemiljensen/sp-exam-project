@@ -5,7 +5,7 @@
 // Created by wired on 5/30/25.
 //
 namespace StochasticSimulation::Examples {
-    void getPeakAverage(float endtime, Vessel& baseVessel, const u_int32_t numberOfRuns) {
+    void getPeakAverage(float endtime, Vessel& baseVessel, const uint32_t numberOfRuns) {
         auto observer = [](const SimulationState& state) -> int {
             thread_local int peakH = 0;
             int currentH = state.species.get("H").quantity;

@@ -20,7 +20,7 @@ namespace StochasticSimulation {
             Vessel& baseVessel,
             const std::function<observerReturnType(SimulationState)>& observer,
             const std::function<reducerReturnType(const std::vector<observerReturnType>&)>& reducer,
-            const u_int32_t numberOfRuns)
+            const uint32_t numberOfRuns)
         {
             std::vector<std::future<observerReturnType>> futures; // futures = promises
 

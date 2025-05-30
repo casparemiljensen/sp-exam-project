@@ -11,7 +11,7 @@ namespace StochasticSimulation {
 
 class Charter {
     public:
-        static void showChart(std::vector<SimulationState>, u_int32_t, u_int32_t, const QString& title); // QString since implicitly shared (copy-on-write, thread-aware)
+        static void showChart(std::vector<SimulationState>, uint32_t, uint32_t, const QString& title); // QString since implicitly shared (copy-on-write, thread-aware)
 };
 
 } // StochasticSimulation

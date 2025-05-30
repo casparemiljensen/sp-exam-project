@@ -7,16 +7,16 @@
         <entry key="Debug">
           <value>
             <PerProfileState>
-              <option name="myQmlPath" value="/usr/lib/qt6/qml" />
-              <option name="myQtBinPath" value="/usr/lib/qt6/bin" />
+              <option name="myQmlPath" value="C:/Qt/6.9.0/mingw_64/qml" />
+              <option name="myQtBinPath" value="C:/Qt/6.9.0/mingw_64/bin" />
             </PerProfileState>
           </value>
         </entry>
         <entry key="Release">
           <value>
             <PerProfileState>
-              <option name="myQmlPath" value="/usr/lib/qt6/qml" />
-              <option name="myQtBinPath" value="/usr/lib/qt6/bin" />
+              <option name="myQmlPath" value="C:/Qt/6.9.0/mingw_64/qml" />
+              <option name="myQtBinPath" value="C:/Qt/6.9.0/mingw_64/bin" />
             </PerProfileState>
           </value>
         </entry>

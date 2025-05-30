@@ -19,7 +19,8 @@ add_library(stochastic-simulation STATIC
         ../include/charter.hpp
         ../include/multithreading.hpp
         multithreading.cpp
-        ../examples/mutli_threading.cpp # This is required for QT6 for some reason
+        ../examples/mutli_threading.cpp
+        ../include/generator.h # This is required for QT6 for some reason
 )
 
 # Sørg for at dit include virker

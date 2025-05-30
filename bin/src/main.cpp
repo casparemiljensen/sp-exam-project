@@ -47,7 +47,8 @@ int main(int argc, char *argv[]) {
 
 
     // Todo: move to own file
-    std::string path = "/home/wired/dev/SP/sp-exam-project/";
+    std::string path = "E:\\GithubRepos\\sp-exam-project";
+    // std::string path = "/home/wired/dev/SP/sp-exam-project/";
     // std::string path = "/Software/c++/sp-exam-project";
     std::ofstream out(path + "network.dot");
     //out << to_dot_network(circadian_rythm.get_reactions(), circadian_rythm.get_species()) << std::endl;
@@ -70,6 +71,7 @@ int main(int argc, char *argv[]) {
 
     std::cout << "Test " << std::endl;
 
+    Examples::get_peak_average_serial();
 
 
     // TrajectoryChartWidget chartWidget;
@@ -77,7 +79,7 @@ int main(int argc, char *argv[]) {
     // chartWidget.resize(800, 600);
     // chartWidget.show();
     //chartWidget.show();
-    return app.exec();
+//    return app.exec();
 
     // return 0;
 }

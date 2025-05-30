@@ -1,11 +1,13 @@
 #ifndef SIMULATORE_HPP
 #define SIMULATORE_HPP
 #include <functional>
+//#include <cppcoro/generator.hpp>
+// #include "generator.h"
 #include <generator>
-
 #include "state.hpp"
 #include "trajectory_logger.hpp"
 #include "vessels.hpp"
+#include <limits>
 
 #pragma once
 
@@ -13,8 +15,10 @@ namespace StochasticSimulation {
 
     class Simulator {
     public:
-        template<class observerReturnType>
+        static std::generator<SimulationState> simulate(float endtime, SimulationState &state, Vessel vessel);
+
         // Implements observer
+        template<class observerReturnType>
         static observerReturnType simulate_observer(float endtime, SimulationState& state, Vessel vessel, const std::function<observerReturnType(SimulationState)>& observer)
         {
             observerReturnType result{};
@@ -68,7 +72,6 @@ namespace StochasticSimulation {
             }
             return result;
         }
-        static std::generator<SimulationState> simulate(float endtime, SimulationState& state, Vessel vessel);
     private:
         //static bool allReactantsQuantitiesLargerThanZero(const Reaction& reaction);
         static bool allReactantsQuantitiesLargerThanZero(const Reaction& reaction, const SimulationState& state);
