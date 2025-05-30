@@ -43,34 +43,29 @@ int main() {
     std::cout << "Reaction 3.5: ";
     r4.print();  // Expected: A --(0.02)--> B
 
-    // Test 4: Use temporary Species directly
-    // Reaction r4 = (Species("X") + Species("Y")) >> 0.1 >>= Species("Z");
-    // std::cout << "Reaction 4: ";
-    // r4.print();  // Expected: X + Y --(0.1)--> Z
-
-
-    std::vector vec = {r1, r2, r3, r4};
-    std::vector vect = {A, B, C, D};
-
-
-    Vessel circadian_rythm = circadian_rhythm();
-
-    Vessel exponential_decay_a = exponential_decay(100,0,1);
-    Vessel exponential_decay_b = exponential_decay(100,0,2);
-    Vessel exponential_decay_c = exponential_decay(50,50,1);
 
     // std::string path = "/home/wired/dev/SP/sp-exam-project/";
     std::string path = "/Software/c++/sp-exam-project";
     std::ofstream out(path + "network.dot");
-    out << to_dot_network(circadian_rythm.get_reactions(), circadian_rythm.get_species()) << std::endl;
-    out << to_dot_network(vec, vect) << std::endl;
+    //out << to_dot_network(circadian_rythm.get_reactions(), circadian_rythm.get_species()) << std::endl;
+    //out << to_dot_network(vec, vect) << std::endl;
     out.close();
 
-    Vessel covid = seihr(100);
-    auto c = covid.createSimulationState();
-    std::vector<SimulationState> trajectory;
 
-    Simulator::simulate(1500, c, covid, trajectory);
+    estimate_peak_hospitalized();
 
-    return 0;
+
+    // Create chart widget and set data
+    auto traj = run_covid_sim();
+    //TrajectoryChartWidget chartWidget;
+    Charter::showChart(traj, 800, 600, "Covid Simulation Trajectory");
+
+    // TrajectoryChartWidget chartWidget;
+    // chartWidget.setTrajectory(traj);
+    // chartWidget.resize(800, 600);
+    // chartWidget.show();
+    //chartWidget.show();
+    return app.exec();
+
+    // return 0;
 }

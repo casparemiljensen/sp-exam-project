@@ -1,5 +1,8 @@
 #ifndef SIMULATORE_HPP
 #define SIMULATORE_HPP
+#include <functional>
+#include <generator>
+
 #include "state.hpp"
 #include "vessels.hpp"
 
@@ -9,8 +12,8 @@ namespace StochasticSimulation {
 
     class Simulator {
     public:
-        static void simulate(float endtime, SimulationState& state, Vessel vessel, std::vector<SimulationState>& trajectory);
-
+        static void simulate(float endtime, SimulationState& state, Vessel vessel, const std::function<void(SimulationState)>& observer);
+        static std::generator<SimulationState> simulate(float endtime, SimulationState& state, Vessel vessel);
     private:
         static bool allReactantsQuantitiesLargerThanZero(const Reaction& reaction);
 

@@ -11,6 +11,11 @@ add_library(stochastic-simulation STATIC
         ../examples/exponential_decay.cpp
         ../../test/SymbolTableTests.cpp
         ../src/trajectory_chart_widget.cpp
+        ../include/trajectory_chart_widget.hpp
+        charter.cpp
+        ../include/charter.hpp
+        ../include/multithreading.hpp
+        multithreading.cpp # This is required for QT6 for some reason
 )
 
 # Sørg for at dit include virker

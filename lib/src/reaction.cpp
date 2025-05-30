@@ -5,6 +5,7 @@
 #include <cmath>
 #include <sstream>
 #include <iostream>
+#include <random>
 
 #include "state.hpp"
 
@@ -46,13 +47,23 @@ namespace StochasticSimulation {
         //Uses Vessel quantities as state, can be modified to use external state
     void Reaction::calculateDelay(SimulationState& state)
     {
-        int sum = 1;
+        int product = 1;
         for (const Species& sp : reactants) {
-            sum *= state.species.get(sp.name).quantity;
+            product *= state.species.get(sp.name).quantity;
         }
 
-        delay = std::exp(rate * sum);
-    };
+        double lambda = rate * product;
+        if (lambda <= 0.0 || !std::isfinite(lambda)) {
+            delay = std::numeric_limits<double>::infinity();
+            return;
+        }
+
+        static std::mt19937 rng(std::random_device{}());
+        std::exponential_distribution<> dist(lambda);
+        delay = dist(rng);
+
+        //std::cout << "delay: " << delay << std::endl;
+    }
 
 
     std::ostream& operator<<(std::ostream& os, const Species& s) {

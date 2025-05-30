@@ -1,6 +1,8 @@
 #ifndef CIRCADIAN_RYTHM_HPP
 #define CIRCADIAN_RYTHM_HPP
 #include "circadian_rythm.hpp"
+
+#include "simulator.hpp"
 #include "vessels.hpp"
 
 namespace StochasticSimulation::Examples {
