@@ -7,6 +7,9 @@
 #include "vessels.hpp"
 #include "state.hpp"
 
+#include "trajectory_logger.hpp"
+
+
 namespace StochasticSimulation {
 
 
@@ -64,14 +67,23 @@ namespace StochasticSimulation {
     }
         // For smallest reaction (reaction with smallest delay) all reactants (species) must have a quantity of x>0 (otherwise they can't create a reaction)
 
-
+    /*
     bool Simulator::allReactantsQuantitiesLargerThanZero(const Reaction& reaction) {
         for (auto& species : reaction.reactants) {
             if (species.quantity <= 0)
                 return false;
         }
         return true;
+    }*/
+
+    bool Simulator::allReactantsQuantitiesLargerThanZero(const Reaction& reaction, const SimulationState& state) { // simulationstate holds the true current quantities
+        for (const auto& species : reaction.reactants) {
+            if (species.quantity > 0 && state.species.get(species.name).quantity <= 0)
+                return false;
+        }
+        return true;
     }
+
 
 
     const Reaction& Simulator::getSmallestDelay(Vessel& vessel) {
@@ -90,6 +102,7 @@ namespace StochasticSimulation {
         }
         return *smallestReaction;
     }
+
     // void simulateFrame()
 };
 

@@ -4,6 +4,7 @@
 #include <generator>
 
 #include "state.hpp"
+#include "trajectory_logger.hpp"
 #include "vessels.hpp"
 
 #pragma once
@@ -69,7 +70,8 @@ namespace StochasticSimulation {
         }
         static std::generator<SimulationState> simulate(float endtime, SimulationState& state, Vessel vessel);
     private:
-        static bool allReactantsQuantitiesLargerThanZero(const Reaction& reaction);
+        //static bool allReactantsQuantitiesLargerThanZero(const Reaction& reaction);
+        static bool allReactantsQuantitiesLargerThanZero(const Reaction& reaction, const SimulationState& state);
 
         static const Reaction& getSmallestDelay(Vessel& vessel);
     };

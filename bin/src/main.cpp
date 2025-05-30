@@ -1,6 +1,10 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <QApplication>
+
+#include "charter.hpp"
+#include "trajectory_chart_widget.hpp"
 
 #include "circadian_rythm.hpp"
 #include "covid-19.hpp"
@@ -9,19 +13,14 @@
 #include "mutli_threading.hpp"
 #include "simulator.hpp"
 
+
+
 using namespace StochasticSimulation;
 
 void runSimulations(float endtime, Vessel& baseVessel);
 
-int main() {
-
-    // Species A("A");
-    // Species B("B");
-    // Species C("C");
-    //
-    // Reaction r = A + B >> 0.01 >>= C;
-    //
-    // r.print();
+int main(int argc, char *argv[]) {
+    QApplication app(argc, argv);
 
     Species A("A"), B("B"), C("C"), D("D");
 
@@ -47,8 +46,9 @@ int main() {
     r4.print();  // Expected: A --(0.02)--> B
 
 
-    // std::string path = "/home/wired/dev/SP/sp-exam-project/";
-    std::string path = "/Software/c++/sp-exam-project";
+    // Todo: move to own file
+    std::string path = "/home/wired/dev/SP/sp-exam-project/";
+    // std::string path = "/Software/c++/sp-exam-project";
     std::ofstream out(path + "network.dot");
     //out << to_dot_network(circadian_rythm.get_reactions(), circadian_rythm.get_species()) << std::endl;
     //out << to_dot_network(vec, vect) << std::endl;

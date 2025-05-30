@@ -1,3 +1,6 @@
+set(CMAKE_AUTOMOC ON) # enables Qt's MOC auto-processing
+# set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
 # Build the core library
 add_library(stochastic-simulation STATIC
         simulator.cpp

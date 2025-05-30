@@ -3,7 +3,7 @@
 
 ## Requirements
 Install **graphviz** https://graphviz.org/download/ & Setup path in environment variables
-
+Install **qtChart**
 
 To generate the network graph, run the following command:
 ```
@@ -44,6 +44,18 @@ Notes
 - Dont use auto for input types
 - We cant have references in vectors
 - Dereference: *Reaction or &Reaction
+- uint32 is portable - _t is a naming style, avoid naming collision.
+- No const in parameters of examples - We pass-by-value - const doest not change anything.
+  - You're not modifying them anyway.
+  - The compiler doesn’t care.
+  - It doesn’t improve performance, safety, or clarity.
+  - It clutters the signature.
+
+Questions
+- Why do we need inline keyword in the examples?
+- What is constexpr
+  - An expr evaluated by compiler at compile-time (Never run-time)
+  - Not much that can run like this, but very performant.
 - Brug kun target_include_directories(...) til headers
 
 
@@ -51,4 +63,12 @@ TODO
 - FIX Process finished with exit code 139 (interrupted by signal 11:SIGSEGV)
 - Investigate why mutable on line 16 in reaction.cpp works/fix!
 - Find out if we need state
-- 
+- Fix the usage of relative path -> should all be absoultes!
+- Use correct naming conventions!
+- Avoid copying (Don't create a bunch of unnecessary copies of objects etc.). 
+- Const correctness. Try to use const as much as possible, but still think if it is reasonable to do.
+- Pay attention to safety and performance when writing in C++ (should be on the top of our mind always).
+
+
+Bugs (Fixed)
+- Segmentation Fault in vessels.hpp - returned Species& changed to Species

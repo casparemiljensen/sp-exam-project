@@ -23,6 +23,10 @@ namespace StochasticSimulation {
             if (!table.contains(key)) throw std::out_of_range("Key not found, passed wrong state to simulator?");
             return table.at(key);
         }
+        const Value& get(const Key& key) const { // Overload for const symboltables
+            if (!table.contains(key)) throw std::out_of_range("Key not found, passed wrong state to simulator?");
+            return table.at(key);
+        }
 
         bool contains(const Key& key) const {
             return table.contains(key);

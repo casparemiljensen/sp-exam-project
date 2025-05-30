@@ -8,6 +8,8 @@
 namespace StochasticSimulation::Examples {
     // Declare the function. Remove 'inline'.
     Vessel seihr(uint32_t N);
+    std::vector<SimulationState> run_covid_sim();
+    void estimate_peak_hospitalized();
 } // namespace StochasticSimulation::Examples
 
 #endif // COVID_19_HPP

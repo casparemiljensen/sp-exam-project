@@ -52,5 +52,22 @@ namespace StochasticSimulation::Examples {
         v.add(MR >> deltaMR >>= env);
         return v;
     }
+
+    std::vector<SimulationState> run_circadian_sim() {
+        auto vessel = circadian_rhythm();
+        auto state = vessel.createSimulationState();
+
+        //Observer version of simulate
+        //auto test = [&trajectory2](const SimulationState& state) { trajectory2.emplace_back(state); };
+        //Simulator::simulate(1500, c, covid, test);
+
+        //Lazy evaluation version of simulate
+        std::vector<SimulationState> trajectory;
+        for (auto&& simState : Simulator::simulate(1500, state, vessel)) { // Consume
+            trajectory.emplace_back(simState);
+        }
+
+        return trajectory;
+    }
 }
 #endif //CIRCADIAN_RYTHM_HPP
