@@ -13,6 +13,9 @@ add_subdirectory(lib/src)
 # Tilføj executable
 add_subdirectory(bin/src)
 
+
+add_subdirectory(benchmark)
+
 # includere unit test
 add_subdirectory(test)
 

@@ -18,6 +18,7 @@ target_link_libraries(sp_exam_project
         Qt6::Gui
         Qt6::Widgets
         Qt6::Charts
+        benchmark
 )
 
 target_link_libraries(stochastic-simulation
