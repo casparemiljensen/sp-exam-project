@@ -7,8 +7,12 @@ Install **qtChart**
 
 To generate the network graph, run the following command:
 ```
+cd /graphs
 dot -Tpng network.dot -o network.png
 ```
+
+SEIHR
+susceptible-exposed-infected-hospitalized-removed
 
 
 Species:

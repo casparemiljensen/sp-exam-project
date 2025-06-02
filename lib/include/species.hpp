@@ -1,6 +1,3 @@
-//
-// Created by wired on 5/29/25.
-//
 
 #ifndef SPECIES_HPP
 #define SPECIES_HPP

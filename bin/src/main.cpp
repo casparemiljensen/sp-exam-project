@@ -10,15 +10,43 @@
 #include "covid-19.hpp"
 #include "exponential_decay.hpp"
 #include "multithreading.hpp"
-#include "mutli_threading.hpp"
+#include "multi_threading.hpp"
 #include "simulator.hpp"
-
+#include <filesystem>
 #include <benchmark/benchmark.h>
 
-
 using namespace StochasticSimulation;
+namespace fs = std::filesystem;
+
 
 void runSimulations(float endtime, Vessel& baseVessel);
+
+
+// Finds the project root by looking at either a .git or CMakeLists.txt
+// Prioritizes to find .git.
+// Falls back to the topmost CMakeLists.txt if not .git is found.
+
+fs::path find_project_root() {
+    fs::path current = fs::current_path();
+    fs::path last_with_cmake;
+
+    while (!current.empty()) {
+        if (fs::exists(current / ".git")) {
+            return current;
+        }
+        if (fs::exists(current / "CMakeLists.txt")) {
+            last_with_cmake = current;
+        }
+        current = current.parent_path();
+    }
+
+    if (!last_with_cmake.empty()) {
+        return last_with_cmake;
+    }
+    throw std::runtime_error("Project root not found (no .git or CMakeLists.txt).");
+}
+
+
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
@@ -46,24 +74,23 @@ int main(int argc, char *argv[]) {
     std::cout << "Reaction 3.5: ";
     r4.print();  // Expected: A --(0.02)--> B
 
+    auto covid = Examples::seihr(20000);
 
-    // Todo: move to own file
-    std::string path = "E:\\GithubRepos\\sp-exam-project";
-    // std::string path = "/home/wired/dev/SP/sp-exam-project/";
-    // std::string path = "/Software/c++/sp-exam-project";
-    std::ofstream out(path + "network.dot");
-    //out << to_dot_network(circadian_rythm.get_reactions(), circadian_rythm.get_species()) << std::endl;
-    //out << to_dot_network(vec, vect) << std::endl;
-    out.close();
+    fs::path out_path = find_project_root() / "graphs" / "network.dot";
+    std::cout << out_path.string() << std::endl;
+    std::ofstream out_file{out_path};
+
+    if (!out_file.is_open()) {
+        throw std::runtime_error("Failed to open file: " + out_path.string());
+    }
+    out_file << to_dot_network(covid.get_reactions(), covid.get_species()) << std::endl;
+    out_file.close();
 
 
     Examples::estimate_peak_hospitalized();
 
-
     // Create chart widget and set data
     auto traj = Examples::run_covid_sim();
-    //TrajectoryChartWidget chartWidget;
-    //Charter::showChart(traj, 800, 600, "Covid Simulation Trajectory");
 
     //Requirement 8
     std::cout << "Test " << std::endl;
@@ -72,11 +99,6 @@ int main(int argc, char *argv[]) {
 
     Charter::showChart(traj, 800, 600, "Test");
 
-
-    // TrajectoryChartWidget chartWidget;
-    // chartWidget.setTrajectory(traj);
-    // chartWidget.resize(800, 600);
-    // chartWidget.show();
-    //chartWidget.show();
     return app.exec();
 }
+
