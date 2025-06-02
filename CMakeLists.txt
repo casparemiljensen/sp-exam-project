@@ -19,14 +19,14 @@ add_subdirectory(test)
 # The goal is to completely disable Google Test dependency for the benchmark submodule.
 # We are prioritizing turning off the testing infrastructure.
 
-# Forcefully set these to OFF to override any previous cached values.
-set(BENCHMARK_ENABLE_GTEST_TESTS OFF CACHE BOOL "Disable building Google Benchmark's own tests" FORCE)
-set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "Disable building Google Benchmark's testing framework" FORCE)
-# Explicitly set DOWNLOAD_DEPENDENCIES to OFF, as we are not enabling tests that would need it.
-set(BENCHMARK_DOWNLOAD_DEPENDENCIES OFF CACHE BOOL "Ensure no download attempt for Google Benchmark's dependencies" FORCE)
-
-# Now, add the Google Benchmark submodule itself
-add_subdirectory(extern/benchmark)
+## Forcefully set these to OFF to override any previous cached values.
+#set(BENCHMARK_ENABLE_GTEST_TESTS OFF CACHE BOOL "Disable building Google Benchmark's own tests" FORCE)
+#set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "Disable building Google Benchmark's testing framework" FORCE)
+## Explicitly set DOWNLOAD_DEPENDENCIES to OFF, as we are not enabling tests that would need it.
+#set(BENCHMARK_DOWNLOAD_DEPENDENCIES OFF CACHE BOOL "Ensure no download attempt for Google Benchmark's dependencies" FORCE)
+#
+## Now, add the Google Benchmark submodule itself
+#add_subdirectory(extern/benchmark)
 
 
 # This add_subdirectory will now find benchmark::benchmark from the submodule.

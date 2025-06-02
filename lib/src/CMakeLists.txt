@@ -12,7 +12,6 @@ add_library(stochastic-simulation STATIC
         ../examples/circadian_rythm.cpp
         ../examples/covid-19.cpp
         ../examples/exponential_decay.cpp
-        ../../test/SymbolTableTests.cpp
         ../src/trajectory_chart_widget.cpp
         ../include/trajectory_chart_widget.hpp
         ../include/charter.hpp
