@@ -5,6 +5,10 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+#include(cmake/doctest.cmake)
+
+include("cmake/sanitizers.cmake")
+
 enable_testing() # Keep this if you have your own unit tests (like in 'test')
 
 add_subdirectory(lib/src)
