@@ -1,8 +1,8 @@
 #include "charter.hpp"
 #include "covid-19.hpp"
-#include "multithreading.hpp"
+#include "multi_threading.hpp"
 namespace StochasticSimulation::Examples {
-    void getPeakAverage(float endtime, Vessel& baseVessel, const uint32_t numberOfRuns) {
+    void get_peak_average(float endtime, Vessel& baseVessel, const uint32_t numberOfRuns) {
         auto observer = [](const SimulationState& state) -> int {
             thread_local int peakH = 0;
             int currentH = state.species.get("H").quantity;
@@ -11,18 +11,17 @@ namespace StochasticSimulation::Examples {
             return peakH;
         };
 
-        auto reducer = [](const std::vector<int>& peaks) -> void { // Get average using reducer
-            int total = 0;
-            for (int peak : peaks) {
-                total += peak;
-            }
-            float average = static_cast<float>(total) / peaks.size();
-            std::cout << "Average sum(" << total << "," << peaks.size() << ") peak H: " << average << "\n";
-        };
-
-        Multithreading::runObserveReduce<int, void>( //<ObserverReturnType, reducerReturnType>
-            endtime, baseVessel, observer, reducer, numberOfRuns
+        auto peaks = Multithreading::runObserve<int>( //<ObserverReturnType>
+            endtime, baseVessel, observer, numberOfRuns
         );
+
+        int sum = 0;
+        for (const auto& peak : peaks) {
+            sum += peak;
+        }
+
+        float average = static_cast<float>(sum) / peaks.size();
+        std::cout << "Average sum(" << sum <<") Peak: " << average << std::endl;
     }
 
     void get_peak_average_serial(float endtime, Vessel& baseVessel, const uint32_t numberOfRuns) {

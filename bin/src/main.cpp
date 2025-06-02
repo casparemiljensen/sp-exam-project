@@ -95,8 +95,6 @@ int main(int argc, char *argv[]) {
     //Requirement 8
     std::cout << "Test " << std::endl;
 
-    Examples::get_peak_average_serial();
-
     Charter::showChart(traj, 800, 600, "Test");
 
     return app.exec();
