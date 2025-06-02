@@ -18,7 +18,8 @@ FetchContent_Declare(doctest
 FetchContent_MakeAvailable(doctest)
 
 
-add_executable(my_tests SymbolTableTests.cpp)
+add_executable(my_tests SymbolTableTests.cpp
+        ../benchmark/benchmarks.cpp)
 #target_link_libraries(olTableTests PRIVATE your_library_target)
 target_link_libraries(my_tests PRIVATE doctest::doctest)
 

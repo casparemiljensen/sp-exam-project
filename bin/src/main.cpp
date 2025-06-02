@@ -13,6 +13,7 @@
 #include "mutli_threading.hpp"
 #include "simulator.hpp"
 
+#include <benchmark/benchmark.h>
 
 
 using namespace StochasticSimulation;
@@ -65,13 +66,11 @@ int main(int argc, char *argv[]) {
     //Charter::showChart(traj, 800, 600, "Covid Simulation Trajectory");
 
     //Requirement 8
-    auto vessel = Examples::seihr(20000);
-
-    Examples::getPeakAverage(1500, vessel, 100);
-
     std::cout << "Test " << std::endl;
 
     Examples::get_peak_average_serial();
+
+    Charter::showChart(traj, 800, 600, "Test");
 
 
     // TrajectoryChartWidget chartWidget;
@@ -79,8 +78,5 @@ int main(int argc, char *argv[]) {
     // chartWidget.resize(800, 600);
     // chartWidget.show();
     //chartWidget.show();
-//    return app.exec();
-
-    // return 0;
+    return app.exec();
 }
-
