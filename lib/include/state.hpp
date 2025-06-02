@@ -3,11 +3,18 @@
 #include <unordered_map>
 #include <string>
 
-struct SimulationState {
-    double time;
-    std::unordered_map<std::string, int> species;
-};
+#include "reaction.hpp"
+#include "species.hpp"
+#include "symbol_table.hpp"
 
+namespace StochasticSimulation {
+    struct SimulationState {
+        double time = 0.0;
+        SymbolTable<std::string, Species> species;
+
+        explicit SimulationState(SymbolTable<std::string, Species> species);
+    };
+}
 #endif //STATE_HPP
 
 

@@ -1,29 +1,26 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <QApplication>
 
-// #include "../../lib/examples/circadian_rythm.hpp"
-// #include "../../lib/examples/covid-19.hpp"
-// #include "../../lib/examples/exponential_decay.hpp"
-// #include "../../lib/include/simulator.hpp"
+#include "charter.hpp"
+#include "trajectory_chart_widget.hpp"
 
 #include "circadian_rythm.hpp"
 #include "covid-19.hpp"
 #include "exponential_decay.hpp"
+#include "multithreading.hpp"
+#include "mutli_threading.hpp"
 #include "simulator.hpp"
 
+
+
 using namespace StochasticSimulation;
-using namespace StochasticSimulation::Examples;
 
-int main() {
+void runSimulations(float endtime, Vessel& baseVessel);
 
-    // Species A("A");
-    // Species B("B");
-    // Species C("C");
-    //
-    // Reaction r = A + B >> 0.01 >>= C;
-    //
-    // r.print();
+int main(int argc, char *argv[]) {
+    QApplication app(argc, argv);
 
     Species A("A"), B("B"), C("C"), D("D");
 
@@ -48,36 +45,42 @@ int main() {
     std::cout << "Reaction 3.5: ";
     r4.print();  // Expected: A --(0.02)--> B
 
-    // Test 4: Use temporary Species directly
-    // Reaction r4 = (Species("X") + Species("Y")) >> 0.1 >>= Species("Z");
-    // std::cout << "Reaction 4: ";
-    // r4.print();  // Expected: X + Y --(0.1)--> Z
 
-
-    std::vector vec = {r1, r2, r3, r4};
-    std::vector vect = {A, B, C, D};
-
-
-    Vessel circadian_rythm = circadian_rhythm();
-
-    Vessel covid_19 = seihr(1000);
-
-    Vessel exponential_decay_a = exponential_decay(100,0,1);
-    Vessel exponential_decay_b = exponential_decay(100,0,2);
-    Vessel exponential_decay_c = exponential_decay(50,50,1);
-
+    // Todo: move to own file
+    std::string path = "E:\\GithubRepos\\sp-exam-project";
     // std::string path = "/home/wired/dev/SP/sp-exam-project/";
-    std::string path = "/Software/c++/sp-exam-project";
+    // std::string path = "/Software/c++/sp-exam-project";
     std::ofstream out(path + "network.dot");
-    out << to_dot_network(circadian_rythm.get_reactions(), circadian_rythm.get_species()) << std::endl;
+    //out << to_dot_network(circadian_rythm.get_reactions(), circadian_rythm.get_species()) << std::endl;
     //out << to_dot_network(vec, vect) << std::endl;
     out.close();
 
-    Vessel covid = seihr(100);
-    auto c = SimulationState();
 
-    Simulator::simulate(1500, c, exponential_decay_a);
+    Examples::estimate_peak_hospitalized();
 
-    return 0;
+
+    // Create chart widget and set data
+    auto traj = Examples::run_covid_sim();
+    //TrajectoryChartWidget chartWidget;
+    //Charter::showChart(traj, 800, 600, "Covid Simulation Trajectory");
+
+    //Requirement 8
+    auto vessel = Examples::seihr(20000);
+
+    Examples::getPeakAverage(1500, vessel, 100);
+
+    std::cout << "Test " << std::endl;
+
+    Examples::get_peak_average_serial();
+
+
+    // TrajectoryChartWidget chartWidget;
+    // chartWidget.setTrajectory(traj);
+    // chartWidget.resize(800, 600);
+    // chartWidget.show();
+    //chartWidget.show();
+//    return app.exec();
+
+    // return 0;
 }
 

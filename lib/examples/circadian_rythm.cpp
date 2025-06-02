@@ -1,10 +1,12 @@
 #ifndef CIRCADIAN_RYTHM_HPP
 #define CIRCADIAN_RYTHM_HPP
 #include "circadian_rythm.hpp"
+
+#include "simulator.hpp"
 #include "vessels.hpp"
 
 namespace StochasticSimulation::Examples {
-    inline Vessel circadian_rhythm()
+    Vessel circadian_rhythm()
     {
         constexpr auto alphaA = 50;
         constexpr auto alpha_A = 500;
@@ -49,6 +51,23 @@ namespace StochasticSimulation::Examples {
         v.add(MA >> deltaMA >>= env);
         v.add(MR >> deltaMR >>= env);
         return v;
+    }
+
+    std::vector<SimulationState> run_circadian_sim() {
+        auto vessel = circadian_rhythm();
+        auto state = vessel.createSimulationState();
+
+        //Observer version of simulate
+        //auto test = [&trajectory2](const SimulationState& state) { trajectory2.emplace_back(state); };
+        //Simulator::simulate(1500, c, covid, test);
+
+        //Lazy evaluation version of simulate
+        std::vector<SimulationState> trajectory;
+        for (auto&& simState : Simulator::simulate(1500, state, vessel)) { // Consume
+            trajectory.emplace_back(simState);
+        }
+
+        return trajectory;
     }
 }
 #endif //CIRCADIAN_RYTHM_HPP
