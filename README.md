@@ -45,7 +45,7 @@ Notes
 - We cant have references in vectors
 - Dereference: *Reaction or &Reaction
 - Brug kun target_include_directories(...) til headers
-
+- Linking error: Due to include of reaction.cpp file in reaction.hpp.
 
 TODO
 - FIX Process finished with exit code 139 (interrupted by signal 11:SIGSEGV)
