@@ -70,13 +70,13 @@ int main(int argc, char *argv[]) {
 
     Examples::get_peak_average_serial();
 
+    Charter::showChart(traj, 800, 600, "Test");
+
 
     // TrajectoryChartWidget chartWidget;
     // chartWidget.setTrajectory(traj);
     // chartWidget.resize(800, 600);
     // chartWidget.show();
     //chartWidget.show();
-//    return app.exec();
-
-    return 0;
+    return app.exec();
 }
