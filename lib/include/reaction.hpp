@@ -14,13 +14,13 @@ namespace StochasticSimulation {
     void myPrint(const std::string& s);
 
 
-
     struct Reaction {
         static bool runningOptimized;
         std::vector<Species> reactants;
         std::vector<Species> products;
         const double rate;
         double delay = 0.0;
+        bool shouldBeRecalculated = true;
 
         explicit Reaction(std::vector<Species> reactants = {}, std::vector<Species> products = {}, double rate = 0.0)
             : reactants(reactants), products(products), rate(rate) {

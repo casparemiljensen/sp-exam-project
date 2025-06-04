@@ -6,8 +6,6 @@
 //    CHECK(x == 1);
 //}
 
-
-
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <doctest/doctest.h>
 #include "../lib/include/symbol_table.hpp"
@@ -44,5 +42,6 @@ TEST_CASE("SymbolTable basic functionality") {
         CHECK(values.size() == 2);
         CHECK(std::find(values.begin(), values.end(), 1) != values.end());
         CHECK(std::find(values.begin(), values.end(), 2) != values.end());
+
     }
 }

@@ -16,16 +16,3 @@ namespace StochasticSimulation {
     };
 }
 #endif //STATE_HPP
-
-
-
-// Example
-
-// SimulationState {
-//     .time = 12.5,
-//     .species = {
-//         {"S", 50},
-//         {"I", 30},
-//         {"R", 20}
-//     }
-// }
