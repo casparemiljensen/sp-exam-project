@@ -68,7 +68,7 @@ namespace StochasticSimulation::Examples {
         for (auto&& simState : Simulator::simulate_lazy(1500, state, vessel)) { // Consume
             trajectory.emplace_back(simState);
         }
-        generate_dot_file(vessel,"Circadian-Rythm-Dot-Graph");
+        generate_dot_file(vessel,"Circadian-Rhythm-Dot-Graph");
         return trajectory;
     }
 }
