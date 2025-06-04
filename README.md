@@ -54,6 +54,7 @@ Notes
   - The compiler doesn’t care.
   - It doesn’t improve performance, safety, or clarity.
   - It clutters the signature.
+- Req 7: Observer is not part of the library. The lib receives an observer, that is passed from the bin/src/main
 
 Questions
 - Why do we need inline keyword in the examples?

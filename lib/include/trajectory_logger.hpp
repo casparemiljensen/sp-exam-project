@@ -15,6 +15,7 @@ namespace StochasticSimulation {
 
     class TrajectoryLogger {
     public:
+        // Requirement 3: Demonstrate the usage of the symbol table with the reactants (names and initial counts).
         void log(const double time, const SymbolTable<std::string, Species>& speciesTable) {
             TimeStep step;
             step.time = time;

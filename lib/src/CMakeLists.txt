@@ -8,7 +8,7 @@ add_library(stochastic-simulation STATIC
         state.cpp
         charter.cpp
         ../examples/multi_threading.cpp
-        ../examples/circadian_rythm.cpp
+        ../examples/circadian_rhythm.cpp
         ../examples/covid-19.cpp
         ../examples/exponential_decay.cpp
         ../src/trajectory_chart_widget.cpp
@@ -17,6 +17,7 @@ add_library(stochastic-simulation STATIC
         ../include/multithreading.hpp
         ../include/generator.h
         ../include/debug_print.hpp
+        ../../bin/src/utils.hpp
 )
 
 # Sørg for at dit include virker

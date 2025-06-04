@@ -25,13 +25,14 @@ namespace StochasticSimulation::Examples {
 
         //Lazy evaluation version of simulate
         std::vector<SimulationState> trajectory;
-        for (auto&& simState : Simulator::simulate(1500, state, vessel)) { // Consume
+        for (auto&& simState : Simulator::simulate_lazy(1500, state, vessel)) { // Consume
             trajectory.emplace_back(simState);
         }
 
         return trajectory;
     }
 
+    // Requirement 5: Demonstrate the application of the library on the three examples
     std::vector<SimulationState> run_exponential_decay_a() {
         return run_exponential_decay(100, 0, 1);
     }

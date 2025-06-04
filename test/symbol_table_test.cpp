@@ -1,17 +1,11 @@
-// #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-//#include <doctest/doctest.h>
-
-//TEST_CASE("simple test") {
-//    auto x = 1;
-//    CHECK(x == 1);
-//}
-
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <memory>
 #include <doctest/doctest.h>
 #include "../lib/include/symbol_table.hpp"
 
 using namespace StochasticSimulation;
+
+// Requirement 9: Implement unit tests (e.g. test symbol table methods, their failure cases, pretty-printing reaction rules, etc).
 
 TEST_CASE("SymbolTable basic functionality") {
     SymbolTable<std::string, int> table;
@@ -44,11 +38,10 @@ TEST_CASE("SymbolTable basic functionality") {
         CHECK(std::find(values.begin(), values.end(), 1) != values.end());
         CHECK(std::find(values.begin(), values.end(), 2) != values.end());
     }
-
 }
 
 TEST_CASE("SymbolTable with complex types") {
-    SymbolTable<std::string, std::unique_ptr<int>> complexTable;
+    SymbolTable<std::string, std::unique_ptr<int> > complexTable;
 
     SUBCASE("Add and get unique_ptr") {
         //complexTable.add("ptr", std::make_unique<int>(42));

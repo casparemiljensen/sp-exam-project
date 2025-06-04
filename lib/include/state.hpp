@@ -13,6 +13,8 @@ namespace StochasticSimulation {
         SymbolTable<std::string, Species> species;
 
         explicit SimulationState(SymbolTable<std::string, Species> species);
+
+        // Requirement 2: Provide pretty-printing of the reaction network in a) human readable.
         std::string to_string();
     };
 }

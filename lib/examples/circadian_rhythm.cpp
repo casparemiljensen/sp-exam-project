@@ -1,6 +1,6 @@
-#ifndef CIRCADIAN_RYTHM_HPP
-#define CIRCADIAN_RYTHM_HPP
-#include "circadian_rythm.hpp"
+#ifndef CIRCADIAN_RHYTHM_HPP
+#define CIRCADIAN_RHYTHM_HPP
+#include "circadian_rhythm.hpp"
 
 #include "simulator.hpp"
 #include "vessels.hpp"
@@ -62,12 +62,13 @@ namespace StochasticSimulation::Examples {
         //Simulator::simulate(1500, c, covid, test);
 
         //Lazy evaluation version of simulate
+
         std::vector<SimulationState> trajectory;
-        for (auto&& simState : Simulator::simulate(1500, state, vessel)) { // Consume
+        for (auto&& simState : Simulator::simulate_lazy(1500, state, vessel)) { // Consume
             trajectory.emplace_back(simState);
         }
 
         return trajectory;
     }
 }
-#endif //CIRCADIAN_RYTHM_HPP
+#endif //CIRCADIAN_RHYTHM_HPP

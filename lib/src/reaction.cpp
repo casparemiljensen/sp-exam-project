@@ -11,7 +11,6 @@
 #include "state.hpp"
 
 namespace StochasticSimulation {
-    
     bool Reaction::runningOptimized = false;
 
     Species::Species()
@@ -19,7 +18,8 @@ namespace StochasticSimulation {
     }
 
     Species::Species(std::string name, int quantity)
-        : name(std::move(name)), _quantity(quantity) {}
+        : name(std::move(name)), _quantity(quantity) {
+    }
 
     //Reaction::Reaction(std::vector<Species> reactants, std::vector<Species> products, const double rate)
     //    : reactants(std::move(reactants)), products(std::move(products)), rate(rate) {}
@@ -42,16 +42,15 @@ namespace StochasticSimulation {
         return out;
     }
 
-        // We have a list of reactants.. If they meet (rate), then produce a result (products).
+    // We have a list of reactants.. If they meet (rate), then produce a result (products).
 
-        //Uses Vessel quantities as state, can be modified to use external state
-    void Reaction::calculateDelay(SimulationState& state)
-    {
+    //Uses Vessel quantities as state, can be modified to use external state
+    void Reaction::calculateDelay(SimulationState &state) {
         if (!shouldBeRecalculated && runningOptimized)
             return;
 
         int product = 1;
-        for (const Species& sp : reactants) {
+        for (const Species &sp: reactants) {
             product *= state.species.get(sp.name)._quantity;
         }
 
@@ -69,68 +68,68 @@ namespace StochasticSimulation {
         //std::cout << "delay: " << delay << std::endl;
     }
 
-
-    std::ostream& operator<<(std::ostream& os, const Species& s) {
+    // Requirement 1 - operator overloading
+    std::ostream &operator<<(std::ostream &os, const Species &s) {
         os << "Species(name=" << s.name << ")";
         return os;
     }
 
-    Reaction operator+(const Species& a, const Species& b) {
-        return Reaction({ a, b});
+    Reaction operator+(const Species &a, const Species &b) {
+        return Reaction({a, b});
     }
 
-    bool operator==(const Species& a, const Species& b) {
+    bool operator==(const Species &a, const Species &b) {
         return a.name == b.name && a._quantity == b._quantity;
     }
 
     // (A + B) + C → adds another Species to the list of reactants
-    Reaction operator+(const Reaction& reaction, const Species& species) { // Er reaction pointer eller ikke?
+    Reaction operator+(const Reaction &reaction, const Species &species) {
         // reaction.reactants.push_back(species);
         // return reaction;
 
         std::vector<Species> new_reactants = reaction.reactants;
         new_reactants.push_back(species);
         return Reaction(new_reactants, reaction.products, reaction.rate);
-
     }
 
     // (A + B) >> 0.01 → sets the reaction rate     - intrinsic
-    Reaction operator>>(const Reaction& reaction, const double rate) {
+    Reaction operator>>(const Reaction &reaction, const double rate) {
         return Reaction(reaction.reactants, reaction.products, rate);
     }
 
-    Reaction operator>>(const Species& species, const double rate) {
-        return Reaction({species},{}, rate);
+    Reaction operator>>(const Species &species, const double rate) {
+        return Reaction({species}, {}, rate);
     }
 
-    Reaction operator>>(const Species& species, const int rate) {
-        return Reaction({species},{}, rate);
+    Reaction operator>>(const Species &species, const int rate) {
+        return Reaction({species}, {}, rate);
     }
 
     //((A + B)) >> 0.01 >>= C → completes the reaction and creates a Reaction object
-    Reaction operator>>=(const Reaction& reaction, const Species& product) {
-        return Reaction{ reaction.reactants, { product }, reaction.rate };
+    Reaction operator>>=(const Reaction &reaction, const Species &product) {
+        return Reaction{reaction.reactants, {product}, reaction.rate};
     }
 
-    Reaction operator>>=(const Reaction& reactionA, const Reaction& reactionB) {
-        return Reaction{ reactionA.reactants, { reactionB.reactants }, reactionA.rate };
+    Reaction operator>>=(const Reaction &reactionA, const Reaction &reactionB) {
+        return Reaction{reactionA.reactants, {reactionB.reactants}, reactionA.rate};
     }
 
 
-    std::string to_dot(const Reaction& reaction, const int index) {
+    std::string to_dot(const Reaction &reaction, const int index) {
         std::ostringstream out;
         std::string rname = "r" + std::to_string(index);
-        out << "  " << rname << " [label=\"λ=" << reaction.rate << "\",shape=\"oval\",fillcolor=\"yellow\",style=\"filled\"];\n";
-        for (const auto& reactant : reaction.reactants) {
+        out << "  " << rname << " [label=\"λ=" << reaction.rate <<
+                "\",shape=\"oval\",fillcolor=\"yellow\",style=\"filled\"];\n";
+        for (const auto &reactant: reaction.reactants) {
             out << "  " << reactant.name << " -> " << rname << ";\n";
         }
-        for (const auto& product : reaction.products) {
+        for (const auto &product: reaction.products) {
             out << "  " << rname << " -> " << product.name << ";\n";
         }
         return out.str();
     }
 
-    std::string to_dot(const Species& species) {
+    std::string to_dot(const Species &species) {
         std::ostringstream out;
 
         out << "  " << species.name << " [shape=\"rect\",fillcolor=\"cyan\",style=\"filled\"];\n";
@@ -138,7 +137,7 @@ namespace StochasticSimulation {
     }
 
 
-    std::string to_dot_network(const std::vector<Reaction>& reactions, const std::vector<Species>& species) {
+    std::string to_dot_network(const std::vector<Reaction>& reactions,const  std::vector<Species>& species) {
         std::ostringstream out;
         out << "digraph {\n";
         for (size_t i = 0; i < reactions.size(); ++i) {
@@ -151,5 +150,3 @@ namespace StochasticSimulation {
         return out.str();
     }
 }
-
-

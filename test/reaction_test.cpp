@@ -7,8 +7,9 @@
 
 using namespace StochasticSimulation;
 
-TEST_CASE("Species_Test") {
+// Requirement 9: Implement unit tests (e.g. test symbol table methods, their failure cases, pretty-printing reaction rules, etc).
 
+TEST_CASE("Species_Test") {
     SUBCASE("Species Default Constructor") {
         Species s;
         CHECK(s.name.empty());
@@ -23,23 +24,22 @@ TEST_CASE("Species_Test") {
 }
 
 TEST_CASE("Reaction_Test") {
-
     SUBCASE("Reaction get reactants test") {
-        const std::vector<Species> reactants {};
-        const std::vector<Species> products {Species{"agent_a", 0}, Species{"agent_b", 0}};
+        const std::vector<Species> reactants{};
+        const std::vector<Species> products{Species{"agent_a", 0}, Species{"agent_b", 0}};
         constexpr double rate = 5.0;
+
 
         Reaction r(reactants, products, rate);
 
         for (std::size_t i = 0; i < r.reactants.size(); i++) {
             CHECK(r.reactants[i].name == reactants[i].name);
         }
-
     }
 
     SUBCASE("Reaction get products test") {
-        const std::vector<Species> reactants {};
-        const std::vector<Species> products {Species{"agent_a", 0}, Species{"agent_b", 0}};
+        const std::vector<Species> reactants{};
+        const std::vector<Species> products{Species{"agent_a", 0}, Species{"agent_b", 0}};
         constexpr double rate = 5.0;
 
         Reaction r(reactants, products, rate);
@@ -52,13 +52,12 @@ TEST_CASE("Reaction_Test") {
 
 
 TEST_CASE("Delay calculation") {
-
     // lambda = rate × product
     SUBCASE("Delay with positive lambda test") {
         auto vessel = Vessel("Name");
         SimulationState state = vessel.createSimulationState();
         state.species.add("A", Species{"A", 5});
-        Species A {"A"};
+        Species A{"A"};
 
         Reaction r({A}, {}, 2.0);
 
@@ -72,7 +71,7 @@ TEST_CASE("Delay calculation") {
         auto vessel = Vessel("Name");
         SimulationState state = vessel.createSimulationState();
         state.species.add("A", Species{"A", 0});
-        Species A {"A"};
+        Species A{"A"};
         Reaction r({A}, {}, 2.0);
         r.calculateDelay(state);
         CHECK(std::isinf(r.delay));
@@ -81,20 +80,22 @@ TEST_CASE("Delay calculation") {
 
 
 TEST_CASE("Species marks reaction as needing recalculation test") {
-    Species A{"A"};
-    Species B{"B"};
-    Reaction r1({A}, {}, 0.5);
-    Reaction r2({B}, {}, 0.5);
-    Reaction r3({A}, {B}, 0.5);
+
+    Vessel v = Vessel("name");
+    const auto A = v.add("A", 50);
+    const auto B = v.add("B", 50);
+    const auto C = v.add("C", 50);
+
+    SimulationState state = v.createSimulationState();
+    Reaction r1(A >> 0.5 >>= B);
+    Reaction r2(B >> 0.5 >>= C);
 
     r1.shouldBeRecalculated = false;
     r2.shouldBeRecalculated = false;
-    r3.shouldBeRecalculated = false;
-    A.increase_quantity();
+    state.species.get("A").increase_quantity();
     CHECK(r1.shouldBeRecalculated == true);
     CHECK(r2.shouldBeRecalculated == false);
-    CHECK(r3.shouldBeRecalculated == true);
-    }
+}
 
 
 // Identical reactions should yield identical fingerprints
@@ -112,9 +113,7 @@ TEST_CASE("Fingerprint is unique test") {
 }
 
 
-
 TEST_CASE("Reaction operator overloads (DSL) test") {
-
     SUBCASE("Species + Species gives correct reactants") {
         Species A("A");
         Species B("B");
@@ -174,5 +173,3 @@ TEST_CASE("Reaction operator overloads (DSL) test") {
         CHECK(r.to_string() == expected);
     }
 }
-
-
