@@ -5,6 +5,7 @@
 #include "charter.hpp"
 #include "simulator.hpp"
 #include "vessels.hpp"
+#include "../../bin/src/utils.hpp"
 
 namespace StochasticSimulation::Examples {
     Vessel seihr(uint32_t N) {
@@ -47,6 +48,8 @@ namespace StochasticSimulation::Examples {
             // Consume
             trajectory.emplace_back(simState);
         }
+
+        generate_dot_file(vessel,"Covid-Dot-Graph");
 
         return trajectory;
     }

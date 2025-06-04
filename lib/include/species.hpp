@@ -2,16 +2,18 @@
 #ifndef SPECIES_HPP
 #define SPECIES_HPP
 #include <functional>
-#include <ranges>
-#include <string>
 #include <iostream>
+#include <ranges>
 #include <set>
+#include <string>
 #include <unordered_set>
 
-namespace StochasticSimulation {
+namespace StochasticSimulation
+{
     struct Reaction;
 
-    struct Species {
+    struct Species
+    {
         virtual ~Species() = default;
         std::string name;
         mutable int _quantity;
@@ -20,21 +22,24 @@ namespace StochasticSimulation {
         explicit Species(std::string name, int quantity = 0);
         Species();
 
-        void increase_quantity() {
-            for (const auto &func: mark_for_recalculation | std::views::values) {
+        void increase_quantity()
+        {
+            for (const auto& func : mark_for_recalculation | std::views::values) {
                 func();
             }
             _quantity++;
         }
 
-        void decrease_quantity() {
-            for (const auto &func: mark_for_recalculation | std::views::values) {
+        void decrease_quantity()
+        {
+            for (const auto& func : mark_for_recalculation | std::views::values) {
                 func();
             }
             _quantity--;
         }
 
-        void create_delay_marker_reference(const std::string& reactionName, std::function<void()> delay_marker_func) {
+        void create_delay_marker_reference(const std::string& reactionName, std::function<void()> delay_marker_func)
+        {
             if (mark_for_recalculation.contains(reactionName))
                 return;
 
@@ -42,10 +47,8 @@ namespace StochasticSimulation {
             std::cout << "Creating delay marker " << reactionName << std::endl;
         }
 
-        virtual std::string to_string() const {
-            return name;
-        }
+        virtual std::string to_string() const { return name; }
     };
-}
+}  // namespace StochasticSimulation
 
-#endif //SPECIES_HPP
+#endif  // SPECIES_HPP
