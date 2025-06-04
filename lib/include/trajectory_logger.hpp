@@ -20,7 +20,7 @@ namespace StochasticSimulation {
             step.time = time;
 
             for (const auto& species : speciesTable.getValues()) {
-                step.speciesQuantities[species.name] = species.quantity;
+                step.speciesQuantities[species.name] = species._quantity;
             }
 
             trajectory_.emplace_back(std::move(step));

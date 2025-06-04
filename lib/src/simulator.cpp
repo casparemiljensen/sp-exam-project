@@ -17,6 +17,7 @@ namespace StochasticSimulation {
     // Generator = C++ lazy evaluation (generates a sequence of elements by repeatedly resuming the coroutine from which it was returned.)
     std::generator<SimulationState> Simulator::simulate(float endtime, SimulationState &state, Vessel vessel)
     {
+        Reaction::runningOptimized = true;
         // Yield initial state
         co_yield state;
 
@@ -54,10 +55,10 @@ namespace StochasticSimulation {
                 continue;
 
             for (auto& species : r.reactants) {
-                state.species.get(species.name).quantity -= 1;
+                state.species.get(species.name).decrease_qantity();
             }
             for (auto& product : r.products) {
-                state.species.get(product.name).quantity += 1;
+                state.species.get(product.name).increase_qantity();
             }
 
             // Record the current time and snapshot of all species quantities into the trajectory log
@@ -78,7 +79,7 @@ namespace StochasticSimulation {
 
     bool Simulator::allReactantsQuantitiesLargerThanZero(const Reaction& reaction, const SimulationState& state) { // simulationstate holds the true current quantities
         for (const auto& species : reaction.reactants) {
-            if (species.quantity > 0 && state.species.get(species.name).quantity <= 0)
+            if (species._quantity > 0 && state.species.get(species.name)._quantity <= 0)
                 return false;
         }
         return true;

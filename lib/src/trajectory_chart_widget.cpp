@@ -67,7 +67,7 @@ void TrajectoryChartWidget::setTrajectory(const std::vector<SimulationState>& tr
         for (const auto& [speciesName, quantity] : step.species) {
             auto it = seriesMap_.find(speciesName);
             if (it != seriesMap_.end()) {
-                it->second->append(step.time, quantity.quantity);
+                it->second->append(step.time, quantity._quantity);
             }
         }
     }
@@ -82,8 +82,8 @@ void TrajectoryChartWidget::setTrajectory(const std::vector<SimulationState>& tr
     int maxQuantity = 0;
     for (const auto& step : trajectory) {
         for (const auto& [_, quantity] : step.species) {
-            if (quantity.quantity > maxQuantity)
-                maxQuantity = quantity.quantity;
+            if (quantity._quantity > maxQuantity)
+                maxQuantity = quantity._quantity;
         }
     }
     axisY->setRange(0, maxQuantity + 1);

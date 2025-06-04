@@ -1,6 +1,7 @@
 #ifndef REACTION_HPP
 #define REACTION_HPP
 
+#include <iomanip>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -15,12 +16,52 @@ namespace StochasticSimulation {
 
 
     struct Reaction {
+        static bool runningOptimized;
         std::vector<Species> reactants;
         std::vector<Species> products;
         const double rate;
         double delay = 0.0;
 
-        explicit Reaction(std::vector<Species> reactants = {}, std::vector<Species> products = {}, double rate = 0.0);
+        explicit Reaction(std::vector<Species> reactants = {}, std::vector<Species> products = {}, double rate = 0.0)
+            : reactants(reactants), products(products), rate(rate) {
+            auto add_marker = [this](Species& species) {
+                species.create_delay_marker_reference(
+                    createFingerprint(),
+                    [this]() { this->mark_delayInvalid(); }
+                );
+            };
+
+            for (auto& species : this->reactants) {
+                add_marker(species);
+            }
+            for (auto& species : this->products) {
+                add_marker(species);
+            }
+        }
+
+        void mark_delayInvalid() {
+            shouldBeRecalculated = true;
+        }
+
+        // Instead of Guid -> Concatenates reactants and products and rate and outputs this as string.
+        // If another identical is found, we can handle that...
+        std::string createFingerprint() const {
+            std::ostringstream oss;
+
+            auto names = [](const std::vector<Species>& vec) {
+                std::vector<std::string> n;
+                for (const auto& s : vec) n.push_back(s.name);
+                std::sort(n.begin(), n.end());
+                return n;
+            };
+
+            for (const auto& n : names(reactants)) oss << "R:" << n << ";";
+            for (const auto& n : names(products)) oss << "P:" << n << ";";
+            oss << "Rate:" << std::fixed << std::setprecision(6) << rate;
+
+            return oss.str();
+        }
+
         void print() const;
         [[nodiscard]] std::string to_string() const;
         void calculateDelay(SimulationState&);

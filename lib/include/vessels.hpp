@@ -29,6 +29,7 @@ namespace StochasticSimulation {
         }
 
         Species environment() {
+            species.add(_env.name, _env);
             return _env;
         }
 

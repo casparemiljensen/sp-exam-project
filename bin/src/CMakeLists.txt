@@ -1,7 +1,8 @@
 set(CMAKE_AUTOMOC ON)
 find_package(Qt6 COMPONENTS Core Gui Widgets Charts REQUIRED)
 
-add_executable(sp_exam_project main.cpp)
+add_executable(sp_exam_project main.cpp
+        ../../lib/include/debug_print.hpp)
 
 target_include_directories(sp_exam_project
         PRIVATE

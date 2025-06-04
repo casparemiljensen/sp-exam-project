@@ -21,6 +21,7 @@ namespace StochasticSimulation {
         template<class observerReturnType>
         static observerReturnType simulate_observer(float endtime, SimulationState& state, Vessel vessel, const std::function<observerReturnType(SimulationState)>& observer)
         {
+            Reaction::runningOptimized = false;
             observerReturnType result{};
             observer(state);
             // Each time the simulation advances:
@@ -61,13 +62,46 @@ namespace StochasticSimulation {
                     continue;
 
                 for (auto& species : r.reactants) {
-                    state.species.get(species.name).quantity -= 1;
+                    state.species.get(species.name).decrease_qantity();
                 }
                 for (auto& product : r.products) {
-                    state.species.get(product.name).quantity += 1;
+                    state.species.get(product.name).increase_qantity();
                 }
 
                 // Record the current time and snapshot of all species quantities into the trajectory log
+                result = observer(state);
+            }
+            return result;
+        }
+
+        // Implements observer
+        template<class observerReturnType>
+        static observerReturnType simulate_observer_optimized(float endtime, SimulationState& state, Vessel vessel, const std::function<observerReturnType(SimulationState)>& observer)
+        {
+            Reaction::runningOptimized = true;
+            observerReturnType result{};
+            observer(state);
+
+            while (state.time < endtime) {
+                for (auto& reaction : vessel.get_reactions()) {
+                    reaction.calculateDelay(state);
+                }
+                auto r = getSmallestDelay(vessel);
+                if (r.delay == std::numeric_limits<double>::infinity()) {
+                    break;
+                }
+                state.time += r.delay;
+
+                if (!allReactantsQuantitiesLargerThanZero(r, state))
+                    continue;
+
+                for (auto& species : r.reactants) {
+                    state.species.get(species.name).decrease_qantity();
+                }
+                for (auto& product : r.products) {
+                    state.species.get(product.name).increase_qantity();
+                }
+
                 result = observer(state);
             }
             return result;

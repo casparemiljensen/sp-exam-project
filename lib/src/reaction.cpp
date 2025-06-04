@@ -1,4 +1,5 @@
 #include <string>
+#include <utility>
 #include <vector>
 #include "reaction.hpp"
 
@@ -10,19 +11,21 @@
 #include "state.hpp"
 
 namespace StochasticSimulation {
+    bool Reaction::runningOptimized = false;
+
     void myPrint(const std::string& s) {
         std::cout << s << std::endl;
     }
 
     Species::Species()
-        : name(), quantity(0) {
+        : name(), _quantity(0) {
     }
 
     Species::Species(std::string name, int quantity)
-        : name(std::move(name)), quantity(quantity) {}
+        : name(std::move(name)), _quantity(quantity) {}
 
-    Reaction::Reaction(std::vector<Species> reactants, std::vector<Species> products, const double rate)
-        : reactants(reactants), products(products), rate(rate) {}
+    //Reaction::Reaction(std::vector<Species> reactants, std::vector<Species> products, const double rate)
+    //    : reactants(std::move(reactants)), products(std::move(products)), rate(rate) {}
 
     void Reaction::print() const {
         myPrint(this->to_string());
@@ -47,9 +50,12 @@ namespace StochasticSimulation {
         //Uses Vessel quantities as state, can be modified to use external state
     void Reaction::calculateDelay(SimulationState& state)
     {
+        if (!shouldBeRecalculated && runningOptimized)
+            return;
+
         int product = 1;
         for (const Species& sp : reactants) {
-            product *= state.species.get(sp.name).quantity;
+            product *= state.species.get(sp.name)._quantity;
         }
 
         double lambda = rate * product;
@@ -62,6 +68,7 @@ namespace StochasticSimulation {
         std::exponential_distribution<> dist(lambda);
         delay = dist(rng);
 
+        shouldBeRecalculated = false;
         //std::cout << "delay: " << delay << std::endl;
     }
 

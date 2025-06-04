@@ -64,7 +64,7 @@ namespace StochasticSimulation::Examples {
             auto state = vessel.createSimulationState();
             int peak = 0;
             for (auto&& simState : Simulator::simulate(500.0, state, vessel)) {
-                int currentH = simState.species.get("H").quantity;
+                int currentH = simState.species.get("H")._quantity;
                 if (currentH > peak) {
                     peak = currentH;
                 }

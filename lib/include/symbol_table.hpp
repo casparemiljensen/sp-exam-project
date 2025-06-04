@@ -1,6 +1,7 @@
 #ifndef SYMBOL_TABLE_HPP
 #define SYMBOL_TABLE_HPP
 
+#include <format>
 #include <stdexcept>
 #include "symbol_table.hpp"
 #include <unordered_map>
@@ -20,11 +21,11 @@ namespace StochasticSimulation {
         }
 
         Value& get(const Key& key) {
-            if (!table.contains(key)) throw std::out_of_range("Key not found, passed wrong state to simulator?");
+            if (!table.contains(key)) throw std::out_of_range(std::format("(SymbolTable) - Key {} not found, passed wrong state to simulator?", key));
             return table.at(key);
         }
         const Value& get(const Key& key) const { // Overload for const symboltables
-            if (!table.contains(key)) throw std::out_of_range("Key not found, passed wrong state to simulator?");
+            if (!table.contains(key)) throw std::out_of_range(std::format("(SymbolTable:const) - Key {} not found, passed wrong state to simulator?", key));
             return table.at(key);
         }
 
