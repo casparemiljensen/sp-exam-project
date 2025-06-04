@@ -4,6 +4,7 @@
 #include <QApplication>
 
 #include "charter.hpp"
+#include "utils.hpp"
 #include "trajectory_chart_widget.hpp"
 
 #include "covid-19.hpp"

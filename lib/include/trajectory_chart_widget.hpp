@@ -15,6 +15,7 @@ QT_USE_NAMESPACE
 
 namespace StochasticSimulation {
 
+
     class TrajectoryChartWidget : public QWidget
     {
         Q_OBJECT
