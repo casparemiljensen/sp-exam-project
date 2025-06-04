@@ -7,4 +7,5 @@ TEST_CASE("simple22 test") {
 
 TEST_CASE("simple23 test") {
   auto x = 2;
+    CHECK(x == 2);
 }

@@ -7,6 +7,7 @@
 //}
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#include <memory>
 #include <doctest/doctest.h>
 #include "../lib/include/symbol_table.hpp"
 
@@ -42,6 +43,15 @@ TEST_CASE("SymbolTable basic functionality") {
         CHECK(values.size() == 2);
         CHECK(std::find(values.begin(), values.end(), 1) != values.end());
         CHECK(std::find(values.begin(), values.end(), 2) != values.end());
+    }
 
+}
+
+TEST_CASE("SymbolTable with complex types") {
+    SymbolTable<std::string, std::unique_ptr<int>> complexTable;
+
+    SUBCASE("Add and get unique_ptr") {
+        //complexTable.add("ptr", std::make_unique<int>(42));
+        //CHECK(*complexTable.get("ptr") == 42);
     }
 }

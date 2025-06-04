@@ -11,11 +11,8 @@
 #include "state.hpp"
 
 namespace StochasticSimulation {
+    
     bool Reaction::runningOptimized = false;
-
-    void myPrint(const std::string& s) {
-        std::cout << s << std::endl;
-    }
 
     Species::Species()
         : name(), _quantity(0) {
@@ -28,18 +25,18 @@ namespace StochasticSimulation {
     //    : reactants(std::move(reactants)), products(std::move(products)), rate(rate) {}
 
     void Reaction::print() const {
-        myPrint(this->to_string());
+        //myPrint(this->to_string());
     }
 
     std::string Reaction::to_string() const {
         std::string out;
         for (size_t i = 0; i < reactants.size(); i++) {
-            out += reactants[i].name;
+            out += reactants[i].to_string();
             if (i < reactants.size() - 1) out += " + ";
         }
         out += " --(" + std::to_string(rate) + ")--> ";
         for (size_t i = 0; i < products.size(); i++) {
-            out += products[i].name;
+            out += products[i].to_string();
             if (i < products.size() - 1) out += " + ";
         }
         return out;
@@ -82,6 +79,10 @@ namespace StochasticSimulation {
         return Reaction({ a, b});
     }
 
+    bool operator==(const Species& a, const Species& b) {
+        return a.name == b.name && a._quantity == b._quantity;
+    }
+
     // (A + B) + C → adds another Species to the list of reactants
     Reaction operator+(const Reaction& reaction, const Species& species) { // Er reaction pointer eller ikke?
         // reaction.reactants.push_back(species);
@@ -93,15 +94,7 @@ namespace StochasticSimulation {
 
     }
 
-    // Reaction operator+(const Reaction& reaction, const Species& species) {
-    //         std::vector<const Species&> new_reactants = reaction.reactants;
-    //         new_reactants.push_back(species);
-    //         return Reaction(new_reactants, reaction.products, reaction.rate);
-    //     }
-
-
-
-    // (A + B) >> 0.01 → sets the reaction rate
+    // (A + B) >> 0.01 → sets the reaction rate     - intrinsic
     Reaction operator>>(const Reaction& reaction, const double rate) {
         return Reaction(reaction.reactants, reaction.products, rate);
     }

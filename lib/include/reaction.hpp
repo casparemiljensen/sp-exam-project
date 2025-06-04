@@ -6,12 +6,10 @@
 #include <string>
 #include <vector>
 #include <sstream>
-
 #include "species.hpp"
 
 namespace StochasticSimulation {
     struct SimulationState;
-    void myPrint(const std::string& s);
 
 
     struct Reaction {
@@ -21,6 +19,8 @@ namespace StochasticSimulation {
         const double rate;
         double delay = 0.0;
         bool shouldBeRecalculated = true;
+
+        virtual ~Reaction() = default;
 
         explicit Reaction(std::vector<Species> reactants = {}, std::vector<Species> products = {}, double rate = 0.0)
             : reactants(reactants), products(products), rate(rate) {
@@ -63,12 +63,13 @@ namespace StochasticSimulation {
         }
 
         void print() const;
-        [[nodiscard]] std::string to_string() const;
+        [[nodiscard]] virtual std::string to_string() const;
         void calculateDelay(SimulationState&);
     };
 
     std::ostream& operator<<(std::ostream& os, const Species& s);
     Reaction operator+(const Species& a, const Species& b);
+    bool operator==(const Species& a, const Species& b);
     Reaction operator+(const Reaction& reaction, const Species& species);
     Reaction operator>>(const Reaction& reaction, const double rate);
     Reaction operator>>(const Species& species, const double rate);

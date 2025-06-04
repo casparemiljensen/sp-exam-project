@@ -22,7 +22,7 @@ namespace fs = std::filesystem;
 void runSimulations(float endtime, Vessel& baseVessel);
 
 
-// Finds the project root by looking at either a .git or CMakeLists.txt
+// Finds the project root by lookSing at either a .git or CMakeLists.txt
 // Prioritizes to find .git.
 // Falls back to the topmost CMakeLists.txt if not .git is found.
 

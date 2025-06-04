@@ -1,4 +1,3 @@
-
 #ifndef MULTITHREADING_HPP
 #define MULTITHREADING_HPP
 #include <functional>

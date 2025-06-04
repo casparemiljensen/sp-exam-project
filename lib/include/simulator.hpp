@@ -1,8 +1,6 @@
 #ifndef SIMULATORE_HPP
 #define SIMULATORE_HPP
 #include <functional>
-//#include <cppcoro/generator.hpp>
-// #include "generator.h"
 #include <generator>
 #include "state.hpp"
 #include "trajectory_logger.hpp"
@@ -41,31 +39,16 @@ namespace StochasticSimulation {
                 }
                 state.time += r.delay;
 
-                // std::cout << "Selected reaction delay: " << r.delay << std::endl;
-                // std::cout << "State time: " << state.time << std::endl;
-                //
-                // std::cout << "Checking reactants for delay: " << r.delay << "\n";
-                // for (const auto& species : r.reactants) {
-                //     std::cout << "Reactant: " << species.name
-                //               << ", quantity in reaction: " << species.quantity
-                //               << ", quantity in state: " << state.species.get(species.name).quantity << "\n";
-                // }
-                //
-                // std::cout << "Before reaction:" << std::endl;
-                // for (const auto& product : r.products) {
-                //     auto& p = state.species.get(product.name);
-                //     std::cout << "Product: " << product.name << ", quantity: " << p.quantity << std::endl;
-                // }
 
 
                 if (!allReactantsQuantitiesLargerThanZero(r, state))
                     continue;
 
                 for (auto& species : r.reactants) {
-                    state.species.get(species.name).decrease_qantity();
+                    state.species.get(species.name).decrease_quantity();
                 }
                 for (auto& product : r.products) {
-                    state.species.get(product.name).increase_qantity();
+                    state.species.get(product.name).increase_quantity();
                 }
 
                 // Record the current time and snapshot of all species quantities into the trajectory log
@@ -96,10 +79,10 @@ namespace StochasticSimulation {
                     continue;
 
                 for (auto& species : r.reactants) {
-                    state.species.get(species.name).decrease_qantity();
+                    state.species.get(species.name).decrease_quantity();
                 }
                 for (auto& product : r.products) {
-                    state.species.get(product.name).increase_qantity();
+                    state.species.get(product.name).increase_quantity();
                 }
 
                 result = observer(state);
@@ -107,7 +90,6 @@ namespace StochasticSimulation {
             return result;
         }
     private:
-        //static bool allReactantsQuantitiesLargerThanZero(const Reaction& reaction);
         static bool allReactantsQuantitiesLargerThanZero(const Reaction& reaction, const SimulationState& state);
 
         static const Reaction& getSmallestDelay(Vessel& vessel);

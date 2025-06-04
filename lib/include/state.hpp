@@ -13,6 +13,7 @@ namespace StochasticSimulation {
         SymbolTable<std::string, Species> species;
 
         explicit SimulationState(SymbolTable<std::string, Species> species);
+        std::string to_string();
     };
 }
 #endif //STATE_HPP

@@ -6,9 +6,6 @@ add_library(stochastic-simulation STATIC
         simulator.cpp
         reaction.cpp
         state.cpp
-        observer.cpp
-        random.cpp
-        agent.cpp
         charter.cpp
         ../examples/multi_threading.cpp
         ../examples/circadian_rythm.cpp
@@ -19,7 +16,7 @@ add_library(stochastic-simulation STATIC
         ../include/charter.hpp
         ../include/multithreading.hpp
         ../include/generator.h
-        ../include/debug_print.hpp # This is required for QT6 for some reason
+        ../include/debug_print.hpp
 )
 
 # Sørg for at dit include virker

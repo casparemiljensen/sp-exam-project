@@ -6,6 +6,9 @@
 #include "symbol_table.hpp"
 #include <unordered_map>
 #include <vector>
+
+#include "species.hpp"
+
 namespace StochasticSimulation {
     template<typename Key, typename Value>
     class SymbolTable

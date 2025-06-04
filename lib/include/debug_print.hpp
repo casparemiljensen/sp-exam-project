@@ -1,7 +1,3 @@
-//
-// Created by wired on 6/3/25.
-//
-
 #ifndef DEBUG_PRINT_HPP
 #define DEBUG_PRINT_HPP
 #include <iostream>
