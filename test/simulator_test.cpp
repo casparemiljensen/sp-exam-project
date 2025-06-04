@@ -18,4 +18,9 @@ TEST_CASE("Reactant_quantity_larger_than_zero_test") {
                 state.species.set("B", 20);
                 CHECK(sim.allReactantsQuantitiesLargerThanZero(r, state));
         }
+
+        SUBCASE("Empty reactants list") {
+                Reaction r({}, {}, 0.1);
+                CHECK(sim.allReactantsQuantitiesLargerThanZero(r, state)); // Should always be true
+        }
 }

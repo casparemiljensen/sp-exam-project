@@ -14,18 +14,18 @@ namespace StochasticSimulation {
 
     struct Reaction {
         static bool runningOptimized;
-        std::vector<Species> reactants;
-        std::vector<Species> products;
+        std::vector<Species*> reactants;
+        std::vector<Species*> products;
         const double rate;
         double delay = 0.0;
         bool shouldBeRecalculated = true;
 
         virtual ~Reaction() = default;
 
-        explicit Reaction(std::vector<Species> reactants = {}, std::vector<Species> products = {}, double rate = 0.0)
+        explicit Reaction(std::vector<Species*> reactants = {}, std::vector<Species*> products = {}, double rate = 0.0)
             : reactants(reactants), products(products), rate(rate) {
-            auto add_marker = [this](Species& species) {
-                species.create_delay_marker_reference(
+            auto add_marker = [this](Species* species) {
+                species->create_delay_marker_reference(
                     createFingerprint(),
                     [this]() { this->mark_delayInvalid(); }
                 );
@@ -48,9 +48,9 @@ namespace StochasticSimulation {
         std::string createFingerprint() const {
             std::ostringstream oss;
 
-            auto names = [](const std::vector<Species>& vec) {
+            auto names = [](const std::vector<Species*>& vec) {
                 std::vector<std::string> n;
-                for (const auto& s : vec) n.push_back(s.name);
+                for (const auto& s : vec) n.push_back(s->name);
                 std::sort(n.begin(), n.end());
                 return n;
             };
@@ -68,13 +68,13 @@ namespace StochasticSimulation {
     };
 
     std::ostream& operator<<(std::ostream& os, const Species& s);
-    Reaction operator+(const Species& a, const Species& b);
+    Reaction operator+(Species& a, Species& b);
     bool operator==(const Species& a, const Species& b);
-    Reaction operator+(const Reaction& reaction, const Species& species);
+    Reaction operator+(const Reaction& reaction, Species& species);
     Reaction operator>>(const Reaction& reaction, const double rate);
-    Reaction operator>>(const Species& species, const double rate);
-    Reaction operator>>(const Species& species, const int rate);
-    Reaction operator>>=(const Reaction& reaction, const Species& product);
+    Reaction operator>>(Species& species, const double rate);
+    Reaction operator>>(Species& species, const int rate);
+    Reaction operator>>=(const Reaction& reaction, Species& product);
     Reaction operator>>=(const Reaction& reactionA, const Reaction& reactionB);
 
     std::string to_dot(const Reaction& reaction, const int index);

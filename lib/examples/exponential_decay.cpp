@@ -8,9 +8,9 @@ namespace StochasticSimulation::Examples {
         auto v = Vessel{"Exponential Decay"};
 
         constexpr auto rate = 0.001;
-        const auto A = v.add("A", q_a);
-        const auto B = v.add("B", q_b);
-        const auto C = v.add("C", q_c);
+        auto A = v.add("A", q_a);
+        auto B = v.add("B", q_b);
+        auto C = v.add("C", q_c);
 
         v.add((A + C) >> rate >>= B + C);
         return v;

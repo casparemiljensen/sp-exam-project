@@ -13,7 +13,7 @@ using namespace StochasticSimulation;
 static void seihr_single_core(benchmark::State& state) {
     auto vessel = Examples::seihr(20000);
 
-    debug_print("\nStarting single core seihr");
+    //debug_print("\nStarting single core seihr");
     for (const auto _ : state) {
         Examples::get_peak_average_serial(1500, vessel, 100, "H");
     }

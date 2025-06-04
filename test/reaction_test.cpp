@@ -25,27 +25,31 @@ TEST_CASE("Species_Test") {
 TEST_CASE("Reaction_Test") {
 
     SUBCASE("Reaction get reactants test") {
-        const std::vector<Species> reactants {};
-        const std::vector<Species> products {Species{"agent_a", 0}, Species{"agent_b", 0}};
+        std::vector<Species*> reactants {};
+        Species a{"agent_a", 0};
+        Species b{"agent_b", 0};
+        std::vector<Species*> products = {&a, &b};
         constexpr double rate = 5.0;
 
         Reaction r(reactants, products, rate);
 
         for (std::size_t i = 0; i < r.reactants.size(); i++) {
-            CHECK(r.reactants[i].name == reactants[i].name);
+            CHECK(r.reactants[i]->name == reactants[i]->name);
         }
 
     }
 
     SUBCASE("Reaction get products test") {
-        const std::vector<Species> reactants {};
-        const std::vector<Species> products {Species{"agent_a", 0}, Species{"agent_b", 0}};
+        std::vector<Species*> reactants {};
+        Species a{"agent_a", 0};
+        Species b{"agent_b", 0};
+        std::vector<Species*> products = {&a, &b};
         constexpr double rate = 5.0;
 
         Reaction r(reactants, products, rate);
 
         for (std::size_t i = 0; i < r.products.size(); i++) {
-            CHECK(r.products[i].name == products[i].name);
+            CHECK(r.products[i]->name == products[i]->name);
         }
     }
 }
@@ -60,7 +64,7 @@ TEST_CASE("Delay calculation") {
         state.species.add("A", Species{"A", 5});
         Species A {"A"};
 
-        Reaction r({A}, {}, 2.0);
+        Reaction r({&A}, {}, 2.0);
 
         r.calculateDelay(state);
 
@@ -73,7 +77,7 @@ TEST_CASE("Delay calculation") {
         SimulationState state = vessel.createSimulationState();
         state.species.add("A", Species{"A", 0});
         Species A {"A"};
-        Reaction r({A}, {}, 2.0);
+        Reaction r({&A}, {}, 2.0);
         r.calculateDelay(state);
         CHECK(std::isinf(r.delay));
     }
@@ -83,9 +87,9 @@ TEST_CASE("Delay calculation") {
 TEST_CASE("Species marks reaction as needing recalculation test") {
     Species A{"A"};
     Species B{"B"};
-    Reaction r1({A}, {}, 0.5);
-    Reaction r2({B}, {}, 0.5);
-    Reaction r3({A}, {B}, 0.5);
+    Reaction r1({&A}, {}, 0.5);
+    Reaction r2({&B}, {}, 0.5);
+    Reaction r3({&A}, {&B}, 0.5);
 
     r1.shouldBeRecalculated = false;
     r2.shouldBeRecalculated = false;
@@ -99,15 +103,21 @@ TEST_CASE("Species marks reaction as needing recalculation test") {
 
 // Identical reactions should yield identical fingerprints
 TEST_CASE("Fingerprint is consistent test") {
-    Reaction r1({Species{"X"}, Species{"Y"}}, {Species{"Z"}}, 1.0);
-    Reaction r2({Species{"X"}, Species{"Y"}}, {Species{"Z"}}, 1.0);
+    Species x{"X"};
+    Species y{"Y"};
+    Species z{"Z"};
+    Reaction r1({&x, &y}, {&z}, 1.0);
+    Reaction r2({&x, &y}, {&z}, 1.0);
     CHECK(r1.createFingerprint() == r2.createFingerprint());
 }
 
 
 TEST_CASE("Fingerprint is unique test") {
-    Reaction r1({Species{"X"}, Species{"Y"}}, {Species{"Z"}}, 1.0);
-    Reaction r2({Species{"X"}, Species{"Y"}}, {Species{"Z"}}, 1.5);
+    Species x{"X"};
+    Species y{"Y"};
+    Species z{"Z"};
+    Reaction r1({&x, &y}, {&z}, 1.0);
+    Reaction r2({&x, &y}, {&z}, 1.5);
     CHECK(r1.createFingerprint() != r2.createFingerprint());
 }
 
@@ -123,8 +133,8 @@ TEST_CASE("Reaction operator overloads (DSL) test") {
         Reaction r = A + B;
 
         CHECK(r.reactants.size() == 2);
-        CHECK(r.reactants[0].name == "A");
-        CHECK(r.reactants[1].name == "B");
+        CHECK(r.reactants[0]->name == "A");
+        CHECK(r.reactants[1]->name == "B");
     }
 
     SUBCASE("Adding species to reaction appends to reactants") {
@@ -136,7 +146,7 @@ TEST_CASE("Reaction operator overloads (DSL) test") {
         Reaction r2 = r1 + C;
 
         CHECK(r2.reactants.size() == 3);
-        CHECK(r2.reactants[2].name == "C");
+        CHECK(r2.reactants[2]->name == "C");
     }
 
     SUBCASE("Reaction >> product finalizes with correct product") {
@@ -146,10 +156,10 @@ TEST_CASE("Reaction operator overloads (DSL) test") {
         Reaction r = A >> 0.01 >>= B;
 
         CHECK(r.reactants.size() == 1);
-        CHECK(r.reactants[0].name == "A");
+        CHECK(r.reactants[0]->name == "A");
 
         CHECK(r.products.size() == 1);
-        CHECK(r.products[0].name == "B");
+        CHECK(r.products[0]->name == "B");
 
         CHECK(r.rate == doctest::Approx(0.01));
     }

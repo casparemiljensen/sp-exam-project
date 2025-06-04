@@ -39,7 +39,7 @@ namespace StochasticSimulation {
                 return;
 
             mark_for_recalculation[reactionName] = delay_marker_func;
-            std::cout << "Creating delay marker " << reactionName << std::endl;
+            //std::cout << "Creating delay marker " << reactionName << std::endl;
         }
 
         virtual std::string to_string() const {

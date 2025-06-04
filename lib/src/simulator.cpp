@@ -39,10 +39,10 @@ namespace StochasticSimulation {
                 continue;
 
             for (auto& species : r.reactants) {
-                state.species.get(species.name).decrease_quantity();
+                state.species.get(species->name).decrease_quantity();
             }
             for (auto& product : r.products) {
-                state.species.get(product.name).increase_quantity();
+                state.species.get(product->name).increase_quantity();
             }
 
             // Record the current time and snapshot of all species quantities into the trajectory log
@@ -54,7 +54,7 @@ namespace StochasticSimulation {
 
     bool Simulator::allReactantsQuantitiesLargerThanZero(const Reaction& reaction, const SimulationState& state) { // simulationstate holds the true current quantities
         for (const auto& species : reaction.reactants) {
-            if (species._quantity > 0 && state.species.get(species.name)._quantity <= 0)
+            if (species->_quantity > 0 && state.species.get(species->name)._quantity <= 0)
                 return false;
         }
         return true;

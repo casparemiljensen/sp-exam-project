@@ -31,12 +31,12 @@ namespace StochasticSimulation {
     std::string Reaction::to_string() const {
         std::string out;
         for (size_t i = 0; i < reactants.size(); i++) {
-            out += reactants[i].to_string();
+            out += reactants[i]->to_string();
             if (i < reactants.size() - 1) out += " + ";
         }
         out += " --(" + std::to_string(rate) + ")--> ";
         for (size_t i = 0; i < products.size(); i++) {
-            out += products[i].to_string();
+            out += products[i]->to_string();
             if (i < products.size() - 1) out += " + ";
         }
         return out;
@@ -51,8 +51,8 @@ namespace StochasticSimulation {
             return;
 
         int product = 1;
-        for (const Species& sp : reactants) {
-            product *= state.species.get(sp.name)._quantity;
+        for (const Species* sp : reactants) {
+            product *= state.species.get(sp->name)._quantity;
         }
 
         double lambda = rate * product;
@@ -75,8 +75,8 @@ namespace StochasticSimulation {
         return os;
     }
 
-    Reaction operator+(const Species& a, const Species& b) {
-        return Reaction({ a, b});
+    Reaction operator+(Species& a, Species& b) {
+        return Reaction(std::vector<Species*>{ &a, &b});
     }
 
     bool operator==(const Species& a, const Species& b) {
@@ -84,12 +84,12 @@ namespace StochasticSimulation {
     }
 
     // (A + B) + C → adds another Species to the list of reactants
-    Reaction operator+(const Reaction& reaction, const Species& species) { // Er reaction pointer eller ikke?
+    Reaction operator+(const Reaction& reaction, Species& species) { // Er reaction pointer eller ikke?
         // reaction.reactants.push_back(species);
         // return reaction;
 
-        std::vector<Species> new_reactants = reaction.reactants;
-        new_reactants.push_back(species);
+        std::vector<Species*> new_reactants = reaction.reactants;
+        new_reactants.push_back(&species);
         return Reaction(new_reactants, reaction.products, reaction.rate);
 
     }
@@ -99,17 +99,17 @@ namespace StochasticSimulation {
         return Reaction(reaction.reactants, reaction.products, rate);
     }
 
-    Reaction operator>>(const Species& species, const double rate) {
-        return Reaction({species},{}, rate);
+    Reaction operator>>(Species& species, const double rate) {
+        return Reaction({&species},{}, rate);
     }
 
-    Reaction operator>>(const Species& species, const int rate) {
-        return Reaction({species},{}, rate);
+    Reaction operator>>(Species& species, const int rate) {
+        return Reaction({&species},{}, rate);
     }
 
     //((A + B)) >> 0.01 >>= C → completes the reaction and creates a Reaction object
-    Reaction operator>>=(const Reaction& reaction, const Species& product) {
-        return Reaction{ reaction.reactants, { product }, reaction.rate };
+    Reaction operator>>=(const Reaction& reaction, Species& product) {
+        return Reaction{ reaction.reactants, { &product }, reaction.rate };
     }
 
     Reaction operator>>=(const Reaction& reactionA, const Reaction& reactionB) {
@@ -122,10 +122,10 @@ namespace StochasticSimulation {
         std::string rname = "r" + std::to_string(index);
         out << "  " << rname << " [label=\"λ=" << reaction.rate << "\",shape=\"oval\",fillcolor=\"yellow\",style=\"filled\"];\n";
         for (const auto& reactant : reaction.reactants) {
-            out << "  " << reactant.name << " -> " << rname << ";\n";
+            out << "  " << reactant->name << " -> " << rname << ";\n";
         }
         for (const auto& product : reaction.products) {
-            out << "  " << rname << " -> " << product.name << ";\n";
+            out << "  " << rname << " -> " << product->name << ";\n";
         }
         return out.str();
     }

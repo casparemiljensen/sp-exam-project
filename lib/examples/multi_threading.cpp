@@ -26,7 +26,7 @@ namespace StochasticSimulation::Examples {
         //std::cout << "Average sum(" << sum <<") Peak: " << average << std::endl;
     }
 
-    void get_peak_average_serial(float endtime, Vessel& baseVessel, const uint32_t numberOfRuns, const std::string& peakProperty) {
+    void get_peak_average_serial(float endtime, Vessel peak_vessel_serial, const uint32_t numberOfRuns, const std::string& peakProperty) {
         int peak = 0;
         auto peak_serial_observer = [&peak, &peakProperty](const SimulationState& state) {
             const int currentProperty = state.species.get(peakProperty)._quantity;
@@ -35,7 +35,6 @@ namespace StochasticSimulation::Examples {
             return peak;
         };
 
-        auto peak_vessel_serial = baseVessel;
         std::vector<int> peaks_serial;
         for (int i = 0; i < numberOfRuns; i++) {
             //debug_print("Starting run");
