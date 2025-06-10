@@ -2,6 +2,7 @@
 #define EXPONENTIAL_DECAY_HPP
 #include "simulator.hpp"
 #include "vessels.hpp"
+#include "../../bin/src/utils.hpp"
 
 namespace StochasticSimulation::Examples {
     Vessel exponential_decay(uint32_t q_a, uint32_t q_b, uint32_t q_c) {
@@ -17,6 +18,7 @@ namespace StochasticSimulation::Examples {
     }
     std::vector<SimulationState> run_exponential_decay(uint32_t q_a, uint32_t q_b, uint32_t q_c) {
         auto vessel = exponential_decay(q_a, q_b, q_c);
+
         auto state = vessel.createSimulationState();
 
         //Observer version of simulate
@@ -25,14 +27,16 @@ namespace StochasticSimulation::Examples {
 
         //Lazy evaluation version of simulate
         std::vector<SimulationState> trajectory;
-        for (auto&& simState : Simulator::simulate(1500, state, vessel)) { // Consume
+        for (auto&& simState : Simulator::simulate_lazy(1500, state, vessel)) { // Consume
             trajectory.emplace_back(simState);
         }
 
         return trajectory;
     }
 
+    // Requirement 5: Demonstrate the application of the library on the three examples
     std::vector<SimulationState> run_exponential_decay_a() {
+
         return run_exponential_decay(100, 0, 1);
     }
     std::vector<SimulationState> run_exponential_decay_b() {
@@ -40,6 +44,11 @@ namespace StochasticSimulation::Examples {
     }
     std::vector<SimulationState> run_exponential_decay_c() {
         return run_exponential_decay(50, 50, 1);
+    }
+
+    void generate_dot_graph_exponential_decay() {
+        auto ves = Vessel{"Exponential Decay"};
+        generate_dot_file(ves,"Exponential-Decay-Dot-Graph");
     }
 }
 

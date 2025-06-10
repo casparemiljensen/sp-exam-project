@@ -7,8 +7,12 @@ Install **qtChart**
 
 To generate the network graph, run the following command:
 ```
+cd /graphs
 dot -Tpng network.dot -o network.png
 ```
+
+SEIHR
+susceptible-exposed-infected-hospitalized-removed
 
 
 Species:
@@ -50,6 +54,7 @@ Notes
   - The compiler doesn’t care.
   - It doesn’t improve performance, safety, or clarity.
   - It clutters the signature.
+- Req 7: Observer is not part of the library. The lib receives an observer, that is passed from the bin/src/main
 
 Questions
 - Why do we need inline keyword in the examples?
@@ -57,7 +62,7 @@ Questions
   - An expr evaluated by compiler at compile-time (Never run-time)
   - Not much that can run like this, but very performant.
 - Brug kun target_include_directories(...) til headers
-
+- Linking error: Due to include of reaction.cpp file in reaction.hpp.
 
 TODO
 - FIX Process finished with exit code 139 (interrupted by signal 11:SIGSEGV)
@@ -69,6 +74,8 @@ TODO
 - Const correctness. Try to use const as much as possible, but still think if it is reasonable to do.
 - Pay attention to safety and performance when writing in C++ (should be on the top of our mind always).
 - Find alternative to <generator> or create a custom generator header file to include since it doesnt work on windows)
+- Comment where requirements is used, in code.
+- Clean cmake files, lib/src
 
 Bugs (Fixed)
 - Segmentation Fault in vessels.hpp - returned Species& changed to Species

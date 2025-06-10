@@ -1,11 +1,7 @@
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+include("../cmake/benchmark.cmake")
 
-cmake_minimum_required(VERSION 3.30)
-
-# find_package(benchmark REQUIRED)
-add_executable(benchmarks benchmarks.cpp)
+add_executable(benchmarks benchmarks.cpp
+        ../lib/include/debug_print.hpp)
 target_link_libraries(benchmarks PRIVATE
         benchmark::benchmark
         stochastic-simulation

@@ -13,19 +13,9 @@ namespace StochasticSimulation {
         SymbolTable<std::string, Species> species;
 
         explicit SimulationState(SymbolTable<std::string, Species> species);
+
+        // Requirement 2: Provide pretty-printing of the reaction network in a) human readable.
+        std::string to_string();
     };
 }
 #endif //STATE_HPP
-
-
-
-// Example
-
-// SimulationState {
-//     .time = 12.5,
-//     .species = {
-//         {"S", 50},
-//         {"I", 30},
-//         {"R", 20}
-//     }
-// }

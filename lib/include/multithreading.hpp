@@ -1,11 +1,8 @@
-//
-// Created by wired on 5/30/25.
-//
-
 #ifndef MULTITHREADING_HPP
 #define MULTITHREADING_HPP
 #include <functional>
 #include <future>
+#include <vector>
 
 #include "simulator.hpp"
 #include "state.hpp"
@@ -14,12 +11,11 @@
 namespace StochasticSimulation {
     class Multithreading {
     public:
-        template<class observerReturnType, class reducerReturnType> // generic
-        static void runObserveReduce(
+        template<class observerReturnType> // generic
+        static std::vector<observerReturnType> runObserve(
             float endtime,
             Vessel& baseVessel,
             const std::function<observerReturnType(SimulationState)>& observer,
-            const std::function<reducerReturnType(const std::vector<observerReturnType>&)>& reducer,
             const uint32_t numberOfRuns)
         {
             std::vector<std::future<observerReturnType>> futures; // futures = promises
@@ -39,7 +35,7 @@ namespace StochasticSimulation {
                 observerResults.emplace_back(f.get());
             }
 
-            reducer(observerResults);
+            return observerResults;
         }
     };
 }

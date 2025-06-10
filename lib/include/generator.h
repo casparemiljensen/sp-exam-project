@@ -1,7 +1,3 @@
-//
-// Created by thoma on 30/05/2025.
-//
-
 #ifndef SP_EXAM_PROJECT_GENERATOR_H
 #define SP_EXAM_PROJECT_GENERATOR_H
 #include <coroutine>

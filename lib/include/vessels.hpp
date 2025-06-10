@@ -11,16 +11,17 @@
 
 namespace StochasticSimulation {
     class Vessel {
+        // Requirement 3: Demonstrate the usage of the symbol table with the reactants (names and initial counts).
         SymbolTable<std::string, Species> species;
         std::vector<Reaction> reactions;
         std::string name = "Vessel";
         Species _env = Species("env");
 
-
     public:
-        explicit  Vessel(std::string name) : name(std::move(name)) {}
+        explicit Vessel(std::string name) : name(std::move(name)) {
+        }
 
-        Species add(const std::string& name, double amount) {
+        Species add(const std::string &name, double amount) {
             return species.add(name, Species(name, amount));
         }
 
@@ -29,10 +30,11 @@ namespace StochasticSimulation {
         }
 
         Species environment() {
+            species.add(_env.name, _env);
             return _env;
         }
 
-        std::vector<Reaction>& get_reactions() {
+        std::vector<Reaction> get_reactions() {
             return reactions;
         }
 
@@ -41,13 +43,9 @@ namespace StochasticSimulation {
         }
 
         SimulationState createSimulationState() {
+            auto a = species;
             return SimulationState(species);
         }
     };
-
-
-
-
-
 }
 #endif // VESSELS_HPP

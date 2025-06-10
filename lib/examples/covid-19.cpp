@@ -5,10 +5,10 @@
 #include "charter.hpp"
 #include "simulator.hpp"
 #include "vessels.hpp"
+#include "../../bin/src/utils.hpp"
 
 namespace StochasticSimulation::Examples {
-    Vessel seihr(uint32_t N)
-    {
+    Vessel seihr(uint32_t N) {
         auto v = Vessel{"COVID19 SEIHR: " + std::to_string(N)};
         const auto eps = 0.0009; // initial fraction of infectious
         const auto I0 = size_t(std::round(eps * N)); // initial infectious
@@ -39,49 +39,49 @@ namespace StochasticSimulation::Examples {
         auto state = vessel.createSimulationState();
         std::vector<SimulationState> trajectory;
 
-        //Observer version of simulate
-        //auto test = [&trajectory](const SimulationState& state) { trajectory.emplace_back(state); };
-        //Simulator::simulate(1500, c, covid, test);
+        // Observer version of simulate
+        // auto test = [&trajectory](const SimulationState& state) { trajectory.emplace_back(state); };
+        // Simulator::simulate(1500, c, covid, test);
 
         //Lazy evaluation version of simulate
-        for (auto&& simState : Simulator::simulate(1500, state, vessel)) { // Consume
+        for (auto &&simState: Simulator::simulate_lazy(1500, state, vessel)) {
+            // Consume
             trajectory.emplace_back(simState);
         }
+
+        generate_dot_file(vessel,"Covid-Dot-Graph");
 
         return trajectory;
     }
 
     // Big covid sim, Req 7B
-    void estimate_peak_hospitalized() { // Uses lazy evaluation with limited population sizes
-        std::vector<std::pair<std::string, uint32_t>> regions = {
+    void estimate_peak_hospitalized() {
+        // Uses lazy evaluation with limited population sizes
+        std::vector<std::pair<std::string, uint32_t> > regions = {
             {"NNJ", 10000},
             {"NDK", 20000}
         };
 
         std::vector<std::string> peaks;
-        for (const auto& [region, population] : regions) {
+        for (const auto &[region, population]: regions) {
             auto vessel = seihr(population);
             auto state = vessel.createSimulationState();
             int peak = 0;
-            for (auto&& simState : Simulator::simulate(500.0, state, vessel)) {
-                int currentH = simState.species.get("H").quantity;
+            for (auto &&simState: Simulator::simulate_lazy(500.0, state, vessel)) {
+                int currentH = simState.species.get("H")._quantity;
                 if (currentH > peak) {
                     peak = currentH;
                 }
             }
             peaks.emplace_back(
-                "Peak hospitalized in " + region + " (population " + std::to_string(population) + ": " + std::to_string(peak));
+                "Peak hospitalized in " + region + " (population " + std::to_string(population) + ": " +
+                std::to_string(peak));
         }
         std::cout << "Peak hospitalized in regions:\n";
-        for (const auto& entry : peaks) {
+        for (const auto &entry: peaks) {
             std::cout << "  - " << entry << "\n";
         }
     }
-
-
-
-
-
 }
 
 #endif //COVID_19_HPP
