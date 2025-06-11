@@ -25,6 +25,7 @@ namespace StochasticSimulation {
 
         // Pass trajectory data to display
         void setTrajectory(const std::vector<SimulationState>& trajectory);
+        void setTrajectory(std::vector<std::vector<double>>& data, std::vector<std::string>& names);
 
     private:
         QChart* chart_;

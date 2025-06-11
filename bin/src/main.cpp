@@ -89,8 +89,7 @@ int main(int argc, char *argv[]) {
 
 
     // Example 2: Circadian Rhythm
-    auto circadian_sim = Examples::run_circadian_sim();
-    Charter::showChart(circadian_sim, 800, 600, "circadian_sim");
+    Examples::run_circadian_sim();
 
 
     // Example 3: Covid 19

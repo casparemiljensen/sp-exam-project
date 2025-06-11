@@ -1,6 +1,7 @@
 #ifndef CIRCADIAN_RHYTHM_HPP
 #define CIRCADIAN_RHYTHM_HPP
 
+#include "charter.hpp"
 #include "simulator.hpp"
 #include "vessels.hpp"
 #include "../../bin/src/utils.hpp"
@@ -53,7 +54,7 @@ namespace StochasticSimulation::Examples {
         return v;
     }
 
-    std::vector<SimulationState> run_circadian_sim() {
+    void run_circadian_sim() {
         auto vessel = circadian_rhythm();
         auto state = vessel.createSimulationState();
 
@@ -64,15 +65,23 @@ namespace StochasticSimulation::Examples {
 
         //Lazy evaluation version of simulate
 
+        std::vector<double> X_coord;
+        std::vector<double> C_coord;
+        std::vector<double> A_coord;
+        std::vector<double> R_coord;
         int i = 0;
         for (auto&& simState : Simulator::simulate_lazy(3, state, vessel)) { // Consume
-            trajectory.emplace_back(simState);
-            //std::cout << "did run: " << i++ << std::endl;
-            i++;
+            X_coord.push_back(simState.time);
+            C_coord.push_back(simState.species.get("C")._quantity);
+            A_coord.push_back(simState.species.get("A")._quantity);
+            R_coord.push_back(simState.species.get("R")._quantity);
         }
         generate_dot_file(vessel,"Circadian-Rhythm-Dot-Graph");
         std::cout << trajectory.size() << '\n';
-        return trajectory;
+        std::vector trajectory_v = {X_coord, C_coord, A_coord, R_coord};
+
+        Charter::showChart(trajectory_v, {"C", "A", "R"}, 800, 600, "Circadian Rhythm");
+        int a = 0;
     }
 }
 #endif //CIRCADIAN_RHYTHM_HPP
