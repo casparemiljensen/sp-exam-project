@@ -13,7 +13,7 @@
 namespace StochasticSimulation {
     // Implements Lazy evaluation through coroutine. Only works in version > c++ 23
     // Generator = C++ lazy evaluation (generates a sequence of elements by repeatedly resuming the coroutine from which it was returned.)
-    std::generator<SimulationState> Simulator::simulate_lazy(float endtime, SimulationState &state, Vessel vessel)
+    std::generator<SimulationState> Simulator::simulate_lazy(float endtime, SimulationState &state, Vessel vessel, int resolution_amount)
     {
         Reaction::runningOptimized = true;
         // Yield initial state
@@ -30,6 +30,7 @@ namespace StochasticSimulation {
                 std::cout << "No valid reactions left — simulation stopping." << std::endl;
                 break;
             }
+            //std::cout << state.time << std::endl;
             state.time += r.delay;
 
 
@@ -37,10 +38,10 @@ namespace StochasticSimulation {
                 continue;
 
             for (auto& species : r.reactants) {
-                state.species.get(species.name).decrease_quantity();
+                state.species.get(species.name).decrease_quantity(resolution_amount);
             }
             for (auto& product : r.products) {
-                state.species.get(product.name).increase_quantity();
+                state.species.get(product.name).increase_quantity(resolution_amount);
             }
 
             // Record the current time and snapshot of all species quantities into the trajectory log
@@ -50,9 +51,9 @@ namespace StochasticSimulation {
     }
     // For smallest reaction (reaction with smallest delay) all reactants (species) must have a quantity of x>0 (otherwise they can't create a reaction
 
-    bool Simulator::allReactantsQuantitiesLargerThanZero(const Reaction &reaction, const SimulationState &state) {
+    bool Simulator::allReactantsQuantitiesLargerThanZero(const Reaction& reaction, const SimulationState &state) {
         // simulationstate holds the true current quantities
-        for (const auto &species: reaction.reactants) {
+        for (const auto& species: reaction.reactants) {
             if (species._quantity > 0 && state.species.get(species.name)._quantity <= 0)
                 return false;
         }
@@ -61,22 +62,18 @@ namespace StochasticSimulation {
 
 
     const Reaction &Simulator::getSmallestDelay(Vessel &vessel) {
-        auto reactions = vessel.get_reactions();
-        if (reactions.empty()) {
-            throw std::runtime_error("No reactions in vessel");
-        }
-        const Reaction *smallestReaction = &reactions[0];
-        double smallest = reactions[0].delay;
+        auto &reactions = vessel.get_reactions();  // Must be a reference!
+        if (reactions.empty()) throw std::runtime_error("No reactions");
 
-        for (const auto &reaction: reactions) {
-            if (reaction.delay < smallest) {
-                smallest = reaction.delay;
-                smallestReaction = &reaction;
-            }
+        Reaction* smallest = &reactions[0];
+        for (auto& r : reactions) {
+            if (r.delay < smallest->delay)
+                smallest = &r;
         }
         // std::cout << smallestReaction->to_string() <<  std::endl;
-        return *smallestReaction;
+        return *smallest;
     }
+
 
     // void simulateFrame()
 };

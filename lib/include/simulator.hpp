@@ -18,7 +18,7 @@ namespace StochasticSimulation
         // Requirement 4: Implement the stochastic simulation (Alg. 1) of the system using the reaction rules.
 
         // Requirement 7: ...provide a lazy trajectory generation interface (coroutine)...
-        static std::generator<SimulationState> simulate_lazy(float endtime, SimulationState& state, Vessel vessel);
+        static std::generator<SimulationState> simulate_lazy(float endtime, SimulationState& state, Vessel vessel, int resolutionAmount = 1);
 
         // Implements observer
 

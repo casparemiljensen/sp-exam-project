@@ -8,22 +8,22 @@
 namespace StochasticSimulation::Examples {
     Vessel circadian_rhythm()
     {
-        constexpr auto alphaA = 50;
-        constexpr auto alpha_A = 500;
-        constexpr auto alphaR = 0.01;
-        constexpr auto alpha_R = 50;
-        constexpr auto betaA = 50;
-        constexpr auto betaR = 5;
-        constexpr auto gammaA = 1;
-        constexpr auto gammaR = 1;
-        constexpr auto gammaC = 2;
-        constexpr auto deltaA = 1;
-        constexpr auto deltaR = 0.2;
-        constexpr auto deltaMA = 10;
-        constexpr auto deltaMR = 0.5;
-        constexpr auto thetaA = 50;
-        constexpr auto thetaR = 100;
-        auto v = Vessel{"Circadian Rhythm"};
+        const auto alphaA = 50;
+        const auto alpha_A = 500;
+        const auto alphaR = 0.01;
+        const auto alpha_R = 50;
+        const auto betaA = 50;
+        const auto betaR = 5;
+        const auto gammaA = 1;
+        const auto gammaR = 1;
+        const auto gammaC = 2;
+        const auto deltaA = 1;
+        const auto deltaR = 0.2;
+        const auto deltaMA = 10;
+        const auto deltaMR = 0.5;
+        const auto thetaA = 50;
+        const auto thetaR = 100;
+        auto v = StochasticSimulation::Vessel{"Circadian Rhythm"};
         const auto env = v.environment();
         const auto DA = v.add("DA", 1);
         const auto D_A = v.add("D_A", 0);
@@ -57,17 +57,21 @@ namespace StochasticSimulation::Examples {
         auto vessel = circadian_rhythm();
         auto state = vessel.createSimulationState();
 
+        std::vector<SimulationState> trajectory;
         //Observer version of simulate
-        //auto test = [&trajectory2](const SimulationState& state) { trajectory2.emplace_back(state); };
-        //Simulator::simulate(1500, c, covid, test);
+        // auto test = [&trajectory](const SimulationState& state) -> int { trajectory.emplace_back(state); return 0; };
+        // Simulator::simulate_observer<int>(1500, state, vessel, test);
 
         //Lazy evaluation version of simulate
 
-        std::vector<SimulationState> trajectory;
-        for (auto&& simState : Simulator::simulate_lazy(1500, state, vessel)) { // Consume
+        int i = 0;
+        for (auto&& simState : Simulator::simulate_lazy(3, state, vessel)) { // Consume
             trajectory.emplace_back(simState);
+            //std::cout << "did run: " << i++ << std::endl;
+            i++;
         }
         generate_dot_file(vessel,"Circadian-Rhythm-Dot-Graph");
+        std::cout << trajectory.size() << '\n';
         return trajectory;
     }
 }

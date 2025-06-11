@@ -34,7 +34,7 @@ namespace StochasticSimulation {
             return _env;
         }
 
-        std::vector<Reaction> get_reactions() {
+        std::vector<Reaction>& get_reactions() {
             return reactions;
         }
 

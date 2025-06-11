@@ -17,6 +17,7 @@ add_library(stochastic-simulation STATIC
         ../include/multithreading.hpp
         ../include/debug_print.hpp
         ../../bin/src/utils.hpp
+        ../examples/circadian_rhythm.hpp
 )
 
 

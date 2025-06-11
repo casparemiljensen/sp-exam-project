@@ -6,8 +6,8 @@
 #include "../../bin/src/utils.hpp"
 
 namespace StochasticSimulation::Examples {
-Vessel circadian_rhythm ();
-std::vector<SimulationState> run_circadian_sim();
+    Vessel circadian_rhythm ();
+    std::vector<SimulationState> run_circadian_sim();
 
 }
 
