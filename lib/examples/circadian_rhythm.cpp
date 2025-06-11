@@ -1,6 +1,5 @@
 #ifndef CIRCADIAN_RHYTHM_HPP
 #define CIRCADIAN_RHYTHM_HPP
-#include "circadian_rhythm.hpp"
 
 #include "simulator.hpp"
 #include "vessels.hpp"

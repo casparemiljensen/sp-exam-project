@@ -15,12 +15,11 @@ add_library(stochastic-simulation STATIC
         ../include/trajectory_chart_widget.hpp
         ../include/charter.hpp
         ../include/multithreading.hpp
-        ../include/generator.h
         ../include/debug_print.hpp
         ../../bin/src/utils.hpp
 )
 
-# Sørg for at dit include virker
+
 target_include_directories(stochastic-simulation
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/../include

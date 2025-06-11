@@ -74,6 +74,7 @@ namespace StochasticSimulation {
                 smallestReaction = &reaction;
             }
         }
+        // std::cout << smallestReaction->to_string() <<  std::endl;
         return *smallestReaction;
     }
 
