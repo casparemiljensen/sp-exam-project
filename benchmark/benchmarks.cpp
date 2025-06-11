@@ -2,7 +2,6 @@
 
 #include "debug_print.hpp"
 #include "../lib/examples/covid-19.hpp"
-#include "../lib/examples/circadian_rhythm.hpp"
 #include "../lib/examples/exponential_decay.hpp"
 #include "../lib/examples/multi_threading.hpp"
 

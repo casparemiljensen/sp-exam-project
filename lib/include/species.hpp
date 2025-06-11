@@ -22,20 +22,20 @@ namespace StochasticSimulation
         explicit Species(std::string name, int quantity = 0);
         Species();
 
-        void increase_quantity()
+        void increase_quantity(int amount = 1)
         {
             for (const auto& func : mark_for_recalculation | std::views::values) {
                 func();
             }
-            _quantity++;
+            _quantity += amount;
         }
 
-        void decrease_quantity()
+        void decrease_quantity(int amount = 1)
         {
             for (const auto& func : mark_for_recalculation | std::views::values) {
                 func();
             }
-            _quantity--;
+            _quantity -= amount;
         }
 
         void create_delay_marker_reference(const std::string& reactionName, std::function<void()> delay_marker_func)
@@ -44,7 +44,7 @@ namespace StochasticSimulation
                 return;
 
             mark_for_recalculation[reactionName] = delay_marker_func;
-            std::cout << "Creating delay marker " << reactionName << std::endl;
+            //std::cout << "Creating delay marker " << reactionName << std::endl;
         }
 
         virtual std::string to_string() const { return name; }

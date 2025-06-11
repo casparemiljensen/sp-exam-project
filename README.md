@@ -5,6 +5,10 @@
 Install **graphviz** https://graphviz.org/download/ & Setup path in environment variables
 Install **qtChart**
 
+msys2
+gcc-14
+cpp 23+
+
 To generate the network graph, run the following command:
 ```
 cd /graphs
@@ -79,3 +83,7 @@ TODO
 
 Bugs (Fixed)
 - Segmentation Fault in vessels.hpp - returned Species& changed to Species
+
+
+FAG
+Generator errors are related to missing or wrong gcc version

@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
 
     // Requirement 7 ...To demonstrate the generic support, estimate the peak of hospitalized agents in Covid-19 example
     // without storing an entire trajectory. Record the peak hospitalization values for population sizes of NNJ and NDK.
-    Examples::estimate_peak_hospitalized();
+    //Examples::estimate_peak_hospitalized();
 
     // Requirement 5: Demonstrate the application of the library on the three examples
 
@@ -91,7 +91,6 @@ int main(int argc, char *argv[]) {
     // Example 2: Circadian Rhythm
     auto circadian_sim = Examples::run_circadian_sim();
     Charter::showChart(circadian_sim, 800, 600, "circadian_sim");
-    //generate_dot_file(circadian_sim, "circadian");
 
 
     // Example 3: Covid 19

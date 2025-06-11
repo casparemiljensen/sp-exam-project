@@ -46,8 +46,8 @@ namespace StochasticSimulation {
 
     //Uses Vessel quantities as state, can be modified to use external state
     void Reaction::calculateDelay(SimulationState &state) {
-        if (!shouldBeRecalculated && runningOptimized)
-            return;
+        // if (!shouldBeRecalculated && runningOptimized && false)
+        //     return;
 
         int product = 1;
         for (const Species &sp: reactants) {
