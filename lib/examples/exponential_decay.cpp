@@ -1,5 +1,6 @@
 #ifndef EXPONENTIAL_DECAY_HPP
 #define EXPONENTIAL_DECAY_HPP
+
 #include "simulator.hpp"
 #include "vessels.hpp"
 #include "../../bin/src/utils.hpp"
@@ -16,9 +17,7 @@ namespace StochasticSimulation::Examples {
         v.add((A + C) >> rate >>= B + C);
         return v;
     }
-    std::vector<SimulationState> run_exponential_decay(uint32_t q_a, uint32_t q_b, uint32_t q_c) {
-        auto vessel = exponential_decay(q_a, q_b, q_c);
-
+    std::vector<SimulationState> run_exponential_decay(Vessel vessel) {
         auto state = vessel.createSimulationState();
 
         //Observer version of simulate
@@ -34,16 +33,25 @@ namespace StochasticSimulation::Examples {
         return trajectory;
     }
 
+    Vessel exponential_decay_a() {
+        return exponential_decay(100, 0, 1);
+    }
+    Vessel  exponential_decay_b() {
+        return exponential_decay(100, 0, 2);
+    }
+    Vessel  exponential_decay_c() {
+        return exponential_decay(50, 50, 1);
+    }
+
     // Requirement 5: Demonstrate the application of the library on the three examples
     std::vector<SimulationState> run_exponential_decay_a() {
-
-        return run_exponential_decay(100, 0, 1);
+        return run_exponential_decay(exponential_decay_a());
     }
     std::vector<SimulationState> run_exponential_decay_b() {
-        return run_exponential_decay(100, 0, 2);
+        return run_exponential_decay(exponential_decay_b());
     }
     std::vector<SimulationState> run_exponential_decay_c() {
-        return run_exponential_decay(50, 50, 1);
+        return run_exponential_decay(exponential_decay_c());
     }
 
     void generate_dot_graph_exponential_decay() {

@@ -7,44 +7,23 @@
 #include <string>
 #include <vector>
 #include <sstream>
+
 #include "species.hpp"
 
 namespace StochasticSimulation {
     struct SimulationState;
 
     struct Reaction {
-        static bool runningOptimized;
         std::vector<Species> reactants;
         std::vector<Species> products;
         const double rate;
         double delay = 0.0;
-        bool shouldBeRecalculated = true;
 
         virtual ~Reaction() = default;
 
         explicit Reaction(std::vector<Species> reactants = {}, std::vector<Species> products = {}, double rate = 0.0)
-            : reactants(reactants), products(products), rate(rate) {
-            auto add_marker = [this](Species &species) {
-                species.create_delay_marker_reference(
-                    createFingerprint(),
-                    [this]() { this->mark_delayInvalid(); }
-                );
-            };
+            : reactants(reactants), products(products), rate(rate) { }
 
-            for (auto &species: this->reactants) {
-                add_marker(species);
-            }
-            for (auto &species: this->products) {
-                add_marker(species);
-            }
-        }
-
-        void mark_delayInvalid() {
-            shouldBeRecalculated = true;
-        }
-
-        // Instead of Guid -> Concatenates reactants and products and rate and outputs this as string.
-        // If another identical is found, we can handle that...
         std::string createFingerprint() const {
             std::ostringstream oss;
 
@@ -64,7 +43,9 @@ namespace StochasticSimulation {
 
         void print() const;
 
-        [[nodiscard]] virtual std::string to_string() const;
+        [[nodiscard]] virtual std::string to_string(int padAmount = 7) const;
+
+        static std::string center(const std::string& s, int width);
 
         void calculateDelay(SimulationState &);
     };

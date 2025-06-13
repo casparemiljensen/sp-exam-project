@@ -1,12 +1,12 @@
 #ifndef VESSELS_HPP
 #define VESSELS_HPP
+
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "symbol_table.hpp"
 #include "reaction.hpp"
-#include <vector>
-
 #include "state.hpp"
 
 namespace StochasticSimulation {
@@ -34,7 +34,7 @@ namespace StochasticSimulation {
             return _env;
         }
 
-        std::vector<Reaction> get_reactions() {
+        std::vector<Reaction>& get_reactions() {
             return reactions;
         }
 
@@ -45,6 +45,16 @@ namespace StochasticSimulation {
         SimulationState createSimulationState() {
             auto a = species;
             return SimulationState(species);
+        }
+
+        // Requirement 2: Provide pretty-printing of the reaction network in a) human readable format and b) network graph
+        void prettyPrintReactions(bool printHeader = true) const {
+            if (printHeader) {
+                std::cout << name << ":\n";
+            }
+            for (const auto& reaction: reactions) {
+                std::cout << reaction.to_string() << std::endl;
+            }
         }
     };
 }

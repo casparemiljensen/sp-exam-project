@@ -1,17 +1,14 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include "reaction.hpp"
-
 #include <cmath>
 #include <sstream>
-#include <iostream>
 #include <random>
 
+#include "reaction.hpp"
 #include "state.hpp"
 
 namespace StochasticSimulation {
-    bool Reaction::runningOptimized = false;
 
     Species::Species()
         : name(), _quantity(0) {
@@ -21,33 +18,37 @@ namespace StochasticSimulation {
         : name(std::move(name)), _quantity(quantity) {
     }
 
-    //Reaction::Reaction(std::vector<Species> reactants, std::vector<Species> products, const double rate)
-    //    : reactants(std::move(reactants)), products(std::move(products)), rate(rate) {}
+    std::string Reaction::to_string(int padAmount) const {
+        std::ostringstream lhs;
+        for (size_t i = 0; i < reactants.size(); ++i) {
+            lhs << reactants[i].to_string();
+            if (i < reactants.size() - 1) lhs << " + ";
+        }
 
-    void Reaction::print() const {
-        //myPrint(this->to_string());
+        std::ostringstream out;
+        out << std::left << std::setw(padAmount) << lhs.str();
+
+        std::ostringstream rateStr;
+        rateStr << "(" << std::fixed << std::setprecision(2) << rate << ")";
+        out << " >>" << center(rateStr.str(), 10) << ">>= ";
+
+        for (size_t i = 0; i < products.size(); ++i) {
+            out << products[i].to_string();
+            if (i < products.size() - 1) out << " + ";
+        }
+
+        return out.str();
     }
 
-    std::string Reaction::to_string() const {
-        std::string out;
-        for (size_t i = 0; i < reactants.size(); i++) {
-            out += reactants[i].to_string();
-            if (i < reactants.size() - 1) out += " + ";
-        }
-        out += " --(" + std::to_string(rate) + ")--> ";
-        for (size_t i = 0; i < products.size(); i++) {
-            out += products[i].to_string();
-            if (i < products.size() - 1) out += " + ";
-        }
-        return out;
+    std::string Reaction::center(const std::string& s, int width) {
+        int pad = width - static_cast<int>(s.length());
+        if (pad <= 0) return s;
+        int pad_left = pad / 2;
+        int pad_right = pad - pad_left;
+        return std::string(pad_left, ' ') + s + std::string(pad_right, ' ');
     }
 
-    // We have a list of reactants.. If they meet (rate), then produce a result (products).
-
-    //Uses Vessel quantities as state, can be modified to use external state
     void Reaction::calculateDelay(SimulationState &state) {
-        if (!shouldBeRecalculated && runningOptimized)
-            return;
 
         int product = 1;
         for (const Species &sp: reactants) {
@@ -63,9 +64,6 @@ namespace StochasticSimulation {
         static std::mt19937 rng(std::random_device{}());
         std::exponential_distribution<> dist(lambda);
         delay = dist(rng);
-
-        shouldBeRecalculated = false;
-        //std::cout << "delay: " << delay << std::endl;
     }
 
     // Requirement 1 - operator overloading
@@ -84,9 +82,6 @@ namespace StochasticSimulation {
 
     // (A + B) + C → adds another Species to the list of reactants
     Reaction operator+(const Reaction &reaction, const Species &species) {
-        // reaction.reactants.push_back(species);
-        // return reaction;
-
         std::vector<Species> new_reactants = reaction.reactants;
         new_reactants.push_back(species);
         return Reaction(new_reactants, reaction.products, reaction.rate);
