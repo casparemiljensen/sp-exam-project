@@ -1,12 +1,8 @@
-
 #ifndef SPECIES_HPP
 #define SPECIES_HPP
 #include <functional>
-#include <iostream>
 #include <ranges>
-#include <set>
 #include <string>
-#include <unordered_set>
 
 namespace StochasticSimulation
 {
@@ -44,7 +40,6 @@ namespace StochasticSimulation
                 return;
 
             mark_for_recalculation[reactionName] = delay_marker_func;
-            //std::cout << "Creating delay marker " << reactionName << std::endl;
         }
 
         virtual std::string to_string() const { return name; }

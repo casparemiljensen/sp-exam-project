@@ -32,8 +32,3 @@ find_package(Qt6 COMPONENTS Core Gui Widgets Charts REQUIRED)
 target_link_libraries(stochastic-simulation
         PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Charts
 )
-
-
-#find_package(doctest )
-
-

@@ -1,7 +1,6 @@
 #include "multi_threading.hpp"
 
 #include "covid-19.hpp"
-#include "debug_print.hpp"
 
 namespace StochasticSimulation::Examples {
     // Requirement 8: Implement support for multiple CPU cores by parallelizing the computation of several simulations at the same time.
@@ -42,13 +41,11 @@ namespace StochasticSimulation::Examples {
         auto peak_vessel_serial = baseVessel;
         std::vector<int> peaks_serial;
         for (int i = 0; i < numberOfRuns; i++) {
-            //debug_print("Starting run");
             peak = 0;
             auto vessel_serial = peak_vessel_serial;
             auto state_serial = peak_vessel_serial.createSimulationState();
             peaks_serial.emplace_back(
                 Simulator::simulate_observer<int>(endtime, state_serial, vessel_serial, peak_serial_observer));
-            //debug_print("Finished run");
         }
 
         int sum = 0;
@@ -71,14 +68,12 @@ namespace StochasticSimulation::Examples {
         auto peak_vessel_serial = baseVessel;
         std::vector<int> peaks_serial;
         for (int i = 0; i < numberOfRuns; i++) {
-            //debug_print("Starting run");
             peak = 0;
             auto vessel_serial = peak_vessel_serial;
             auto state_serial = peak_vessel_serial.createSimulationState();
             peaks_serial.emplace_back(
                 Simulator::simulate_observer_optimized<int>(endtime, state_serial, vessel_serial,
                                                             peak_serial_observer));
-            //debug_print("Finished run");
         }
 
         int sum = 0;

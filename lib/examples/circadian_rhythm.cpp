@@ -65,9 +65,8 @@ namespace StochasticSimulation::Examples {
         //Lazy evaluation version of simulate
 
         int i = 0;
-        for (auto&& simState : Simulator::simulate_lazy(3, state, vessel)) { // Consume
+        for (auto&& simState : Simulator::simulate_lazy(48, state, vessel)) { // Consume
             trajectory.emplace_back(simState);
-            //std::cout << "did run: " << i++ << std::endl;
             i++;
         }
         generate_dot_file(vessel,"Circadian-Rhythm-Dot-Graph");

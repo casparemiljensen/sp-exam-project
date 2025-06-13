@@ -1,5 +1,3 @@
-#include "simulator.hpp"
-
 #include <chrono>
 #include <functional>
 #include <vector>
@@ -7,7 +5,7 @@
 #include "vessels.hpp"
 #include "state.hpp"
 
-#include "trajectory_logger.hpp"
+#include "simulator.hpp"
 
 
 namespace StochasticSimulation {
@@ -15,22 +13,18 @@ namespace StochasticSimulation {
     // Generator = C++ lazy evaluation (generates a sequence of elements by repeatedly resuming the coroutine from which it was returned.)
     std::generator<SimulationState> Simulator::simulate_lazy(float endtime, SimulationState &state, Vessel vessel, int resolution_amount)
     {
-        Reaction::runningOptimized = true;
         // Yield initial state
         co_yield state;
 
         while (state.time < endtime) {
             for (auto& reaction : vessel.get_reactions()) {
-                // for each reaction compute delay
                 reaction.calculateDelay(state);
-                //std::cout << "Updated reaction delay: " << reaction.delay << std::endl;
             }
             auto r = getSmallestDelay(vessel);
             if (r.delay == std::numeric_limits<double>::infinity()) {
                 std::cout << "No valid reactions left — simulation stopping." << std::endl;
                 break;
             }
-            //std::cout << state.time << std::endl;
             state.time += r.delay;
 
 
@@ -45,14 +39,13 @@ namespace StochasticSimulation {
             }
 
             // Record the current time and snapshot of all species quantities into the trajectory log
-            // Yield state amd only run next iteration when next state is required from calling entity (lazy evaluation)
+            // Yield state and only run next iteration when next state is required from calling entity (lazy evaluation)
             co_yield state;
         }
     }
-    // For smallest reaction (reaction with smallest delay) all reactants (species) must have a quantity of x>0 (otherwise they can't create a reaction
 
+    // For smallest reaction (reaction with smallest delay) all reactants (species) must have a quantity of x>0 (otherwise they can't create a reaction
     bool Simulator::allReactantsQuantitiesLargerThanZero(const Reaction& reaction, const SimulationState &state) {
-        // simulationstate holds the true current quantities
         for (const auto& species: reaction.reactants) {
             if (species._quantity > 0 && state.species.get(species.name)._quantity <= 0)
                 return false;
@@ -70,32 +63,6 @@ namespace StochasticSimulation {
             if (r.delay < smallest->delay)
                 smallest = &r;
         }
-        // std::cout << smallestReaction->to_string() <<  std::endl;
         return *smallest;
     }
-
-
-    // void simulateFrame()
 };
-
-
-// TASKS
-// r.delay formula
-// simulate algo
-// SimulationState class
-
-
-//
-// class Simulator {
-// public:
-//     Simulator(std::unordered_map<std::string, int> init_state,
-//               std::vector<Reaction> reactions)
-//         : state(std::move(init_state)), reactions(std::move(reactions)) {}
-//
-//     std::vector<std::pair<double, std::unordered_map<std::string, int>>>
-//     simulate(double end_time);
-//
-// private:
-//     std::unordered_map<std::string, int> state;
-//     std::vector<Reaction> reactions;
-// };

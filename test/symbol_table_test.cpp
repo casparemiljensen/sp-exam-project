@@ -6,7 +6,6 @@
 using namespace StochasticSimulation;
 
 // Requirement 9: Implement unit tests (e.g. test symbol table methods, their failure cases, pretty-printing reaction rules, etc).
-
 TEST_CASE("SymbolTable basic functionality") {
     SymbolTable<std::string, int> table;
 
@@ -37,14 +36,5 @@ TEST_CASE("SymbolTable basic functionality") {
         CHECK(values.size() == 2);
         CHECK(std::find(values.begin(), values.end(), 1) != values.end());
         CHECK(std::find(values.begin(), values.end(), 2) != values.end());
-    }
-}
-
-TEST_CASE("SymbolTable with complex types") {
-    SymbolTable<std::string, std::unique_ptr<int> > complexTable;
-
-    SUBCASE("Add and get unique_ptr") {
-        //complexTable.add("ptr", std::make_unique<int>(42));
-        //CHECK(*complexTable.get("ptr") == 42);
     }
 }

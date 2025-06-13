@@ -3,11 +3,10 @@
 
 #include <format>
 #include <stdexcept>
-#include "symbol_table.hpp"
 #include <unordered_map>
 #include <vector>
 
-#include "species.hpp"
+#include "symbol_table.hpp"
 
 // Requirement 3: Implement a generic symbol table to store and lookup objects of user-defined key and value types.
 // Support failure cases when a) the table does not contain a looked up symbol,

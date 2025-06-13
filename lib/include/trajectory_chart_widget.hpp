@@ -1,14 +1,12 @@
 #ifndef TRAJECTORYCHARTWIDGET_HPP
 #define TRAJECTORYCHARTWIDGET_HPP
 
-#include <QWidget>
 #include <QtCharts/QChartView>
 #include <QtCharts/QLineSeries>
 #include <vector>
-#include "trajectory_logger.hpp"
-#include <map>
 #include <string>
 
+#include "trajectory_logger.hpp"
 #include "state.hpp"
 
 QT_USE_NAMESPACE
@@ -25,6 +23,7 @@ namespace StochasticSimulation {
 
         // Pass trajectory data to display
         void setTrajectory(const std::vector<SimulationState>& trajectory);
+        void setTrajectory(std::vector<std::vector<double>>& data, std::vector<std::string>& names);
 
     private:
         QChart* chart_;
