@@ -85,11 +85,12 @@ int main(int argc, char *argv[]) {
 
     // generate_dot_file(exponential_decay_a, "exponential_decay_a");
     // generate_dot_file(exponential_decay_b, "exponential_decay_b");
-    // generate_dot_file(exponential_decay_c, "exponential_decay_c");
+    generate_dot_file(, "exponential_decay_c");
 
 
     // Example 2: Circadian Rhythm
-    Examples::run_circadian_sim();
+    auto circadian_rhythm = Examples::run_circadian_sim();
+    Charter::showChart(circadian_rhythm, 800, 600, "circadian_rhythm");
 
 
     // Example 3: Covid 19

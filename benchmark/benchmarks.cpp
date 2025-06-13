@@ -1,5 +1,6 @@
 #include <benchmark/benchmark.h>
 
+#include "circadian_rhythm.hpp"
 #include "debug_print.hpp"
 #include "../lib/examples/covid-19.hpp"
 #include "../lib/examples/exponential_decay.hpp"
