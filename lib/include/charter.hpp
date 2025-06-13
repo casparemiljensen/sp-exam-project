@@ -1,11 +1,10 @@
-
 #ifndef CHARTER_HPP
 #define CHARTER_HPP
-#include <vector>
 
-#include "state.hpp"
+#include <vector>
 #include <QWidget>
 
+#include "state.hpp"
 
 namespace StochasticSimulation {
 

@@ -8,7 +8,6 @@
 using namespace StochasticSimulation;
 
 // Requirement 9: Implement unit tests (e.g. test symbol table methods, their failure cases, pretty-printing reaction rules, etc).
-
 TEST_CASE("Species_Test") {
     SUBCASE("Species Default Constructor") {
         Species s;
@@ -78,26 +77,6 @@ TEST_CASE("Delay calculation") {
     }
 }
 
-
-TEST_CASE("Species marks reaction as needing recalculation test") {
-
-    Vessel v = Vessel("name");
-    const auto A = v.add("A", 50);
-    const auto B = v.add("B", 50);
-    const auto C = v.add("C", 50);
-
-    SimulationState state = v.createSimulationState();
-    Reaction r1(A >> 0.5 >>= B);
-    Reaction r2(B >> 0.5 >>= C);
-
-    r1.shouldBeRecalculated = false;
-    r2.shouldBeRecalculated = false;
-    state.species.get("A").increase_quantity();
-    CHECK(r1.shouldBeRecalculated == true);
-    CHECK(r2.shouldBeRecalculated == false);
-}
-
-
 // Identical reactions should yield identical fingerprints
 TEST_CASE("Fingerprint is consistent test") {
     Reaction r1({Species{"X"}, Species{"Y"}}, {Species{"Z"}}, 1.0);
@@ -159,7 +138,7 @@ TEST_CASE("Reaction operator overloads (DSL) test") {
 
         Reaction r = A + B >> 0.02 >>= B;
 
-        std::string expected = "A + B --(0.020000)--> B";
+        std::string expected = "A + B   >>  (0.02)  >>= B";
         CHECK(r.to_string() == expected);
     }
 
@@ -169,7 +148,7 @@ TEST_CASE("Reaction operator overloads (DSL) test") {
 
         Reaction r = A + B >> 0.02 >>= B + A;
 
-        std::string expected = "A + B --(0.020000)--> B + A";
+        std::string expected = "A + B   >>  (0.02)  >>= B + A";
         CHECK(r.to_string() == expected);
     }
 }

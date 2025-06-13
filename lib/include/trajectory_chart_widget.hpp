@@ -1,14 +1,12 @@
 #ifndef TRAJECTORYCHARTWIDGET_HPP
 #define TRAJECTORYCHARTWIDGET_HPP
 
-#include <QWidget>
 #include <QtCharts/QChartView>
 #include <QtCharts/QLineSeries>
 #include <vector>
-#include "trajectory_logger.hpp"
-#include <map>
 #include <string>
 
+#include "trajectory_logger.hpp"
 #include "state.hpp"
 
 QT_USE_NAMESPACE

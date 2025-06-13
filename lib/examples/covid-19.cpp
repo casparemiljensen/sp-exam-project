@@ -1,8 +1,8 @@
 #ifndef COVID_19_HPP
 #define COVID_19_HPP
+
 #include <cmath>
 
-#include "charter.hpp"
 #include "simulator.hpp"
 #include "vessels.hpp"
 #include "../../bin/src/utils.hpp"
