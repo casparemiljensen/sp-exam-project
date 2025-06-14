@@ -1,0 +1,17 @@
+\begin{table}[ht]
+    \centering
+    \caption{Benchmark results for 50 iterations and 100 runs (Processor: AMD Ryzen 9 5950X 16-Core)}
+    \begin{tabular}{lcccc}
+        \toprule
+        \textbf{Benchmark} & \textbf{Time (ms)} & \textbf{CPU (ms)} & \textbf{Iterations} & \textbf{endTime} \\
+        \midrule
+        seihr\_single\_core & 6936    & 6910   & 50 & 100 \\
+        seihr\_multi\_core & 976      & 4.69   & 50 & 100 \\
+        circadian\_rhythm\_single\_core\_100\_runs & 24519 & 24432  & 50 & 48 \\
+        circadian\_rhythm\_single\_core\_100\_runs\_optimized & 24512 & 24421  & 50 & 48 \\
+        circadian\_rhythm\_multi\_core\_100\_runs & 4383 & 14.1   & 50 & 48 \\
+        exponential\_decay\_single\_core & 8.77 & 8.75  & 50 & 1500 \\
+        exponential\_decay\_multi\_core  & 8.07 & 5.00  & 50 & 1500 \\
+        \bottomrule
+    \end{tabular}
+\end{table}

@@ -51,7 +51,7 @@ TEST_CASE("Reaction_Test") {
 
 
 TEST_CASE("Delay calculation") {
-    // lambda = rate × product
+    // lambda = rate x product
     SUBCASE("Delay with positive lambda test") {
         auto vessel = Vessel("Name");
         SimulationState state = vessel.createSimulationState();

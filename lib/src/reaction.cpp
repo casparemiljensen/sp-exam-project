@@ -80,14 +80,14 @@ namespace StochasticSimulation {
         return a.name == b.name && a._quantity == b._quantity;
     }
 
-    // (A + B) + C → adds another Species to the list of reactants
+    // (A + B) + C --> adds another Species to the list of reactants
     Reaction operator+(const Reaction &reaction, const Species &species) {
         std::vector<Species> new_reactants = reaction.reactants;
         new_reactants.push_back(species);
         return Reaction(new_reactants, reaction.products, reaction.rate);
     }
 
-    // (A + B) >> 0.01 → sets the reaction rate     - intrinsic
+    // (A + B) >> 0.01 --> sets the reaction rate     - intrinsic
     Reaction operator>>(const Reaction &reaction, const double rate) {
         return Reaction(reaction.reactants, reaction.products, rate);
     }
@@ -100,7 +100,7 @@ namespace StochasticSimulation {
         return Reaction({species}, {}, rate);
     }
 
-    //((A + B)) >> 0.01 >>= C → completes the reaction and creates a Reaction object
+    //((A + B)) >> 0.01 >>= C --> completes the reaction and creates a Reaction object
     Reaction operator>>=(const Reaction &reaction, const Species &product) {
         return Reaction{reaction.reactants, {product}, reaction.rate};
     }

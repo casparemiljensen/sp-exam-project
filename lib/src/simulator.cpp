@@ -22,7 +22,7 @@ namespace StochasticSimulation {
             }
             auto r = getSmallestDelay(vessel);
             if (r.delay == std::numeric_limits<double>::infinity()) {
-                std::cout << "No valid reactions left — simulation stopping." << std::endl;
+                std::cout << "No valid reactions left - simulation stopping." << std::endl;
                 break;
             }
             state.time += r.delay;
