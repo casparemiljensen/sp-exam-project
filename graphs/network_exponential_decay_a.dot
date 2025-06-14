@@ -1,0 +1,11 @@
+digraph {
+  r0 [label="λ=0.001",shape="oval",fillcolor="yellow",style="filled"];
+  A -> r0;
+  C -> r0;
+  r0 -> B;
+  r0 -> C;
+  B [shape="rect",fillcolor="cyan",style="filled"];
+  C [shape="rect",fillcolor="cyan",style="filled"];
+  A [shape="rect",fillcolor="cyan",style="filled"];
+}
+
