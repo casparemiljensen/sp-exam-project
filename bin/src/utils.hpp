@@ -9,37 +9,41 @@
 
 namespace fs = std::filesystem;
 
-inline fs::path find_project_root() {
-    fs::path current = fs::current_path();
-    fs::path last_with_cmake;
 
-    while (!current.empty()) {
-        if (fs::exists(current / ".git")) {
-            return current;
-        }
-        if (fs::exists(current / "CMakeLists.txt")) {
-            last_with_cmake = current;
+// Find the project root. Defined by prefix of project name, and a CMakeLists.txt
+inline fs::path find_project_root() {
+    constexpr auto project_name_prefix = "sp-exam-project";
+    fs::path current = fs::current_path();
+
+    for (int max_depth = 20; max_depth > 0 && !current.empty(); --max_depth) {  // Max-depth: How far up we want to go.
+        const auto folder_name = current.filename().string();
+
+        if (folder_name.starts_with(project_name_prefix)) {
+            if (fs::exists(current / "CMakeLists.txt")) {
+                return current;
+            }
         }
         current = current.parent_path();
     }
-
-    if (!last_with_cmake.empty()) {
-        return last_with_cmake;
-    }
-    throw std::runtime_error("Project root not found (no .git or CMakeLists.txt).");
+    throw std::runtime_error("Project root not found (based on project name prefix + CMakeLists.txt).");
 }
 
 
 inline void generate_dot_file(StochasticSimulation::Vessel &ves, const std::string &name) {
-    fs::path out_path = find_project_root() / "graphs" / ("network_" + name + ".dot");
-    std::cout << out_path.string() << std::endl;
+    try {
+        fs::path out_path = find_project_root() / "graphs" / ("network_" + name + ".dot");
+        std::cout << out_path.string() << std::endl;
 
-    std::ofstream out_file{out_path};
-    if (!out_file.is_open()) {
-        throw std::runtime_error("Failed to open file: " + out_path.string());
+        std::ofstream out_file{out_path};
+        if (!out_file.is_open()) {
+            throw std::runtime_error("Failed to open file: " + out_path.string());
+        }
+        out_file << to_dot_network(ves.get_reactions(), ves.get_species()) << std::endl;
+        out_file.close();
+    } catch (const std::exception& ex) {
+        std::cerr << "[generate_dot_file] Error: " << ex.what() << std::endl;
+        throw; // rethrow after logging
     }
-    out_file << to_dot_network(ves.get_reactions(), ves.get_species()) << std::endl;
-    out_file.close();
 }
 
 #endif // UTILS_HPP

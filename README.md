@@ -21,11 +21,10 @@ Which is included in bleeding edge package managers and will be added to others 
 CLion does not yet come packaged with gcc-14+/cpp 23+, so for Windows systems:
 Install **MSYS2** - ensure CLion configuration uses ucrt64 
 
-
-### FAQ:
+### FAQ
 Generator errors are related to missing or wrong gcc version. See [Additional Requirements](#additional-requirements)
 
-## Network graph Generation:
+## Network graph Generation (Graphviz)
 To generate the network graph, run the following command in a terminal:
 ```
 cd /graphs

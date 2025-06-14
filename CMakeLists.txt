@@ -7,7 +7,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include("cmake/sanitizers.cmake")
 
-enable_testing() # Keep this if you have your own unit tests (like in 'test')
+enable_testing()
 
 add_subdirectory(lib/src)
 
